@@ -1,149 +1,52 @@
-<Homework8>
- "query": {
-  "count": 1,
-  "created": "2018-02-12T19:25:03Z",
-  "lang": "en-US",
-  "results": {
-   "channel": {
-    "units": {
-     "distance": "mi",
-     "pressure": "in",
-     "speed": "mph",
-     "temperature": "F"
-    },
-    "title": "Yahoo! Weather - Nome, AK, US",
-    "link": "http://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-2460286/",
-    "description": "Yahoo! Weather for Nome, AK, US",
-    "language": "en-us",
-    "lastBuildDate": "Mon, 12 Feb 2018 10:25 AM AKST",
-    "ttl": "60",
-    "location": {
-     "city": "Nome",
-     "country": "United States",
-     "region": " AK"
-    },
-    "wind": {
-     "chill": "19",
-     "direction": "248",
-     "speed": "11"
-    },
-    "atmosphere": {
-     "humidity": "95",
-     "pressure": "996.0",
-     "rising": "0",
-     "visibility": "10.2"
-    },
-    "astronomy": {
-     "sunrise": "10:9 am",
-     "sunset": "6:25 pm"
-    },
-    "image": {
-     "title": "Yahoo! Weather",
-     "width": "142",
-     "height": "18",
-     "link": "http://weather.yahoo.com",
-     "url": "http://l.yimg.com/a/i/brand/purplelogo//uh/us/news-wea.gif"
-    },
-    "item": {
-     "title": "Conditions for Nome, AK, US at 09:00 AM AKST",
-     "lat": "64.499474",
-     "long": "-165.405792",
-     "link": "http://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-2460286/",
-     "pubDate": "Mon, 12 Feb 2018 09:00 AM AKST",
-     "condition": {
-      "code": "26",
-      "date": "Mon, 12 Feb 2018 09:00 AM AKST",
-      "temp": "27",
-      "text": "Cloudy"
-     },
-     "forecast": [
-      {
-       "code": "26",
-       "date": "12 Feb 2018",
-       "day": "Mon",
-       "high": "30",
-       "low": "22",
-       "text": "Cloudy"
-      },
-      {
-       "code": "16",
-       "date": "13 Feb 2018",
-       "day": "Tue",
-       "high": "32",
-       "low": "23",
-       "text": "Snow"
-      },
-      {
-       "code": "30",
-       "date": "14 Feb 2018",
-       "day": "Wed",
-       "high": "30",
-       "low": "17",
-       "text": "Partly Cloudy"
-      },
-      {
-       "code": "26",
-       "date": "15 Feb 2018",
-       "day": "Thu",
-       "high": "21",
-       "low": "17",
-       "text": "Cloudy"
-      },
-      {
-       "code": "16",
-       "date": "16 Feb 2018",
-       "day": "Fri",
-       "high": "23",
-       "low": "15",
-       "text": "Snow"
-      },
-      {
-       "code": "14",
-       "date": "17 Feb 2018",
-       "day": "Sat",
-       "high": "31",
-       "low": "24",
-       "text": "Snow Showers"
-      },
-      {
-       "code": "23",
-       "date": "18 Feb 2018",
-       "day": "Sun",
-       "high": "33",
-       "low": "29",
-       "text": "Breezy"
-      },
-      {
-       "code": "14",
-       "date": "19 Feb 2018",
-       "day": "Mon",
-       "high": "33",
-       "low": "27",
-       "text": "Snow Showers"
-      },
-      {
-       "code": "5",
-       "date": "20 Feb 2018",
-       "day": "Tue",
-       "high": "35",
-       "low": "32",
-       "text": "Rain And Snow"
-      },
-      {
-       "code": "23",
-       "date": "21 Feb 2018",
-       "day": "Wed",
-       "high": "31",
-       "low": "25",
-       "text": "Breezy"
-      }
-     ],
-     "description": "<![CDATA[<img src=\"http://l.yimg.com/a/i/us/we/52/26.gif\"/>\n<BR />\n<b>Current Conditions:</b>\n<BR />Cloudy\n<BR />\n<BR />\n<b>Forecast:</b>\n<BR /> Mon - Cloudy. High: 30Low: 22\n<BR /> Tue - Snow. High: 32Low: 23\n<BR /> Wed - Partly Cloudy. High: 30Low: 17\n<BR /> Thu - Cloudy. High: 21Low: 17\n<BR /> Fri - Snow. High: 23Low: 15\n<BR />\n<BR />\n<a href=\"http://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-2460286/\">Full Forecast at Yahoo! Weather</a>\n<BR />\n<BR />\n<BR />\n]]>",
-     "guid": {
-      "isPermaLink": "false"
-     }
-    }
-   }
-  }
- }
-}
+<!DOCTYPE html>
+ <html ng-app="weatherApp">
+   <head>
+     <meta charset="utf-8″ />
+     <title>
+       AngularJS Plunker
+     </title>
+     <link data-require="bootstrap-css@3.1.1″ data-semver="3.1.1″ rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+     <script>
+       document.write(‘<base href="‘ + document.location + ‘" />’);
+     </script>
+     <link rel="stylesheet" href="style.css" />
+     <script data-require="angular.js@1.2.x" src="https://code.angularjs.org/1.2.16/angular.js&#8221; data-semver="1.2.16″>
+     </script>
+     <script data-require="jquery@*" data-semver="2.0.3″ src="http://code.jquery.com/jquery-2.0.3.min.js">
+     </script&gt;
+       <script data-require="bootstrap@*" data-semver="3.1.1″ src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js">
+   </script>
+   <script src="app.js">
+   </script>
+   </head>
+ <body ng-controller="weatherCtrl">
+   <form>
+     <div class="form-group">
+       <input class="form-control" type="number" ng-model="zip" placeholder="e.g. 84105″ />
+       <input class="btn btn-default" type="submit" value="Search" ng-click="findWeather(zip)" />
+     </div>
+   </form>
+   <p ng-show="zip">
+     Searching the forecasts for: {{zip}}
+   </p>
+   <div>
+     <h1>
+       Forecast For {{ place.city.name}}
+     </h1>
+     <div class="col-xs-6″>
+       <div class="panel panel-primary">
+         <div class="panel-heading">
+           <h4>
+             <img class="img-thumbnail forecast-img" ng-src="http://openweathermap.org/img/w/{{ place.list[0].weather[0].icon }}.png" />
+           </h4>
+         </div>
+         <div class="panel-body">
+           <p>
+             H: {{ place.list[0].temp.day }}° C
+           </p>
+         </div>
+       </div>
+     </div>
+      </div>
+ </body>
+ </html>
