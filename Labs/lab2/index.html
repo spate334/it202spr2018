@@ -1,0 +1,137 @@
+<!doctype html>
+
+<html>
+
+  <head>
+      
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      
+  <style>
+      
+      .screen {
+          display: none;
+      }
+      
+  </style>
+
+    <title>Movie Info</title>
+  </head>
+  <body>
+      
+    <div class="container" id ="home"></div>
+        <div class="container" id ="search">
+            <input type="text" id="query" name="fname">
+            <button type="button" id="btn">Search</button>
+        </div>
+        <div class="container" id ="results">
+            <div class="card" id="template">
+  <div class="card-header">
+    Information
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Name of the Movie</h5>
+    <p class="card-text">Release Date Information</p>
+    <a href="#" class="btn btn-primary">Click Here</a>
+  </div>
+</div>
+    </div>
+    
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <nav>
+  <a href="#one" id="navOne" >Home</a>
+  <a href="#two" id="navTwo" >Screen 2</a>
+  <a href="#three" id="navThree" >Screen 3</a>
+</nav>
+
+<div id="one" class="screen">
+<h2>
+Home
+</h2>
+<p>
+A "screen" on a Single Page App (SPA) is simply a div that is shown at the appropriate time.
+</p>
+<p>
+This page has one nav and three div elements.  When the nav link is clicked, the event handler reads the href attribute and uses that to construct the selector to show the appropriate "screen."
+</p>
+
+
+</div>
+<div id="two" class="screen">
+<h2>
+Two
+</h2>
+<p>
+This is two.
+</p>
+</div>
+<div id="three" class="screen">
+<h2>
+Three
+</h2><p>
+This is three.
+</p>
+</div>
+
+.screen {display:none;min-height:200px;color:white; padding:15px;}
+#one{background-color: red;}
+#two{background-color: green;}
+#three{background-color: blue;}
+// show the home screen
+$("#one").show();
+
+// when a nav link is clicked, hide screens then show target
+
+$("nav a").on("click", function() {
+	$(".screen").hide();
+  var targetSelector = $(this).attr("href");
+  console.log(targetSelector)
+  $(targetSelector).show();
+});
+    <script>
+        $("#template").hide();
+        
+        
+        function doSearch() {
+        
+        var url = "https://api.nytimes.com/svc/movies/v2/reviews/search.json";
+        url += '?' + $.param({
+            'api-key': "37a047e09b4e456e9e3f3f01a90e443f",
+            'query': $("#query").val()
+        });
+        
+        $.ajax({
+            url: url,
+            method: 'GET',
+        }).done(function(response) {
+            
+            //fix the end
+            $("results").append("<p>Your search for <strong>" + $("query").val() + "</strong> returned " + response.num_results);
+            
+            $.each(response.results, function( i, v ) {
+                
+                var template = $('#template').clone();
+                $("h5",template).text(v.display_title);
+                $("p",template).text("Release Date: " + v.opening_date);
+                $('#results').append(template);
+                $(template).show()
+            });
+            
+            console.log(result);
+        }).fail(function(err) {
+            throw err;
+        });
+        }
+        
+        $("#btn").on("click", doSearch);
+    </script>
+    >
+    
+  </body>
+</html>
