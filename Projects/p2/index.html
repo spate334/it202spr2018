@@ -113,4 +113,56 @@
                     throw err;
                 });
             }
+            //from chicago database
+            function searchSchoolsByType() {
+                var types = "''";
+                $("#schoolTypes option:selected").each(function(i, v) {
+                    types += ", '" + v.text + "'";
+                })
+                
+                 $.ajax({
+                    url: "https://data.cityofchicago.org/resource/76dk-7ieb.json?$WHERE=school_type IN (CURRENT_TYPES)".replace("CURRENT_TYPES", types),
+                    method: 'GET',
+                }).done(function(response) {
+                    removeMarkers();
+                    if (response.length != 0) {
+                        var colors = {};
+                        
+                           $.each(response, function(i, v) {
+                            var schoolName = v.long_name;
+                            var latitude = parseFloat(v.school_latitude);
+                            var longitude = parseFloat(v.school_longitude);
+                            var type = v.school_type;
+                            var marker = new google.maps.Map({
+                                position: {lat: latitude, lng: longitude},
+                                map: map,
+                                title: v.long_name,
+                                icon: getIconFromType(type)
+                            });
+                            markers.push(marker);
+                            
+                            var cloneTemplateSchool = $("#templateSchool").clone();
+                            cloneTemplateSchool.attr("id", "school_" + v.short_name);
+                            cloneTemplateSchool.find("div > h5").text(schoolName);
+                            cloneTemplateSchool.find("div > small").text(type);
+                            cloneTemplateSchool.find("p").text(v.address);
+                            cloneTemplateSchool.find("div:last-child").css("background-color", getColorFromType(type));
+                            $(".list-group").eq(0).append(cloneTemplateSchool);
+                        });
+                        
+                    var calculatedHeight = $(window).height() - $("#resultsTitleBar").outerHeight(true);
+                $("#searching").text("Searching...").css("height", calculatedHeight).css("line-height", calculatedHeight / 16).show();
+                $(".list-group-item:not(#templateSchool)").remove();
+                $(".list-group").css("height", calculatedHeight).hide();
+                $("#map").css("height", calculatedHeight);
+                
+                 $("#searching").hide();
+                        $(".list-group").show().scrollTop(0);
+                    } else {
+                        $("#searching").text("No results").show();
+                    }
+                }).fail(function(error) {
+                    throw error;
+                });
+            }
         
