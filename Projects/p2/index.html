@@ -5,3 +5,63 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
+        
+         <!-- Bootstrap core CSS -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Bootstrap core JavaScript -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        
+         <style type="text/css">
+            .screen, #templateSchoolType, #searching, #templateSchool {
+                display: none;
+                overflow: hidden;
+            }
+            
+            .title {
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+        </style>
+        <body class="text-center">
+        <div class="container-fluid screen" id="home">
+            <div class="row p-2 m-0">
+                <h1 class="col mt-auto mb-auto">Chicago Public Schools</h1>
+            </div>
+            <button id="start" class="btn btn-primary">Get Started!</button>
+        </div>
+        <div class="container-fluid screen" id="select">
+            <div class="row p-2 m-0">
+                <h1 class="col mt-auto mb-auto">Search Chicago Public Schools</h1>
+            </div>
+            <div class="form-group">
+                <label for="schoolTypes">Search by type(s):</label>
+                <select multiple class="form-control" id="schoolTypes" style="height: 285px;">
+                    <option id="templateSchoolType"></option>
+                </select>
+            </div>
+            <button id="search" class="btn btn-primary">Search</button>
+        </div>
+        <div class="container-fluid screen" id="result">
+            <div class="row p-2 m-0" id="resultsTitleBar">
+                <button class="btn btn-dark col-1" id="backToSearch">&larr;</button>
+                <h1 class="col-10 mt-auto mb-auto">Results</h1>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <b><p id="searching" class="m-0 align-middle">Searching...</p></b>
+                    <div class="list-group overflow-scroll">
+                        <div class="list-group-item list-group-item-action flex-column align-items-start" id="templateSchool">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1"></h5>
+                                <small></small>
+                            </div>
+                            <p class="mb-1"></p>
+                            <div style="height:5px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8" id="map"></div>
+            </div>
+        </div>
