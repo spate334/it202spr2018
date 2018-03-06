@@ -165,4 +165,66 @@
                     throw error;
                 });
             }
+             //Found on piazza from an earlier post
+         $(document).ready(function(){
+        var menuEl = document.querySelector('#demo-menu');
+        var menu = new mdc.menu.MDCMenu(menuEl);
+        var menuButtonEl = document.querySelector('#menu-btn');
+        menuButtonEl.addEventListener('click', function() {
+          menu.open = !menu.open;
+        });
+        var remember = document.querySelector('input[name="remember"]');
+        remember.addEventListener('change', function(evt) {
+          menu.rememberSelection = evt.target.checked;
+        });
+        var animation = document.querySelector('input[name="animation"]');
+        animation.addEventListener('change', function(evt) {
+          menu.quickOpen = evt.target.checked;
+        });
+        var radios = document.querySelectorAll('input[name="position"]');
+        var anchor = document.querySelector('.mdc-menu-anchor');
+        // Initialize to top left.
+        anchor.style.setProperty('top', '0');
+        anchor.style.setProperty('left', '0');
+      });
+      
+      
+      
+      $(document).ready(function(){
+        var drawerEl = document.querySelector('.mdc-drawer');
+        var MDCtemp = mdc.drawer.MDCtemp;
+        var drawer = new MDCtemp(drawerEl);
+        document.querySelector('#drawerButton').addEventListener('click', function() {
+          drawer.open = true;
+        });
+        drawerEl.addEventListener('MDCtemp:open', function() {
+          console.log('Received MDCtemp:open');
+        });
+        drawerEl.addEventListener('MDCtemp:close', function() {
+          console.log('Received MDCtemp:close');
+        });
+        // Demonstrate application of --activated modifier to drawer menu items
+        var selection = 'mdc-list-item--selected';
+        document.querySelector('.mdc-drawer__drawer').addEventListener('click', function(event) {
+          var el = event.target;
+          while (el && !el.classList.contains('mdc-list-item')) {
+            el = el.parentElement;
+          }
+          if (el) {
+            var selectedItem = document.querySelector('.' + selection);
+            if (selectedItem) {
+              selectedItem.classList.remove(selection);
+            }
+            event.target.classList.add(selection);
+          }
+        });
+      });
+        
+            </script>
+        <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxjK4p_QD1fOMIzyLATJ80ueHmzRRjiy8&callback=initMap"
+  </script>-jbqIwuo-CDzSA&callback=initMap">
+        </script>
+    </body>
+</html>
         
