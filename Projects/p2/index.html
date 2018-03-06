@@ -86,12 +86,31 @@
         };    
     
     
-        var mymap;
+        var map;
         var markers = [];
         function initMap() {
             var loc = {lat: 41.866127, lng: -87.652351};
-            mymap = new google.maps.Map(document.getElementById('map'), {
+            map = new google.maps.Map(document.getElementById('map'), {
               zoom: 10,
               center: {lat: 41.866127, lng: -87.652351}
             });
         }
+        
+         function getSchoolTypes() {
+                $.ajax({
+                    url: "https://data.cityofchicago.org/resource/76dk-7ieb.json?$select=school_type&$group=school_type",
+                    method: 'GET',
+                }).done(function(response) {
+                    $.each(response, function(i, v) {
+                        var cloneSchoolType = $("#templateSchoolType").clone();
+                        cloneSchoolType.attr("id", v.school_type.replace(" ", "_"));
+                        cloneSchoolType.text(v.school_type);
+                        $("#schoolTypes").append(cloneSchoolType);
+                    });
+                    
+                    $("#start").prop("disabled", false);
+                }).fail(function(err) {
+                    throw err;
+                });
+            }
+        
