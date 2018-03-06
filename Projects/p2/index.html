@@ -67,3 +67,31 @@
                 <div class="col-8" id="map"></div>
             </div>
         </div>
+        
+         <script src="node_modules/material-components-web/dist/material-components-web.js"></script>
+        
+     <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous">
+    </script>
+    <script>
+    
+         function removeMarkers() {
+        //Loop through and remove markers
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+        };    
+    
+    
+        var mymap;
+        var markers = [];
+        function initMap() {
+            var loc = {lat: 41.866127, lng: -87.652351};
+            mymap = new google.maps.Map(document.getElementById('map'), {
+              zoom: 10,
+              center: {lat: 41.866127, lng: -87.652351}
+            });
+        }
