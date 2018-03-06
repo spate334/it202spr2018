@@ -3,6 +3,12 @@
 <html>
 
   <head>
+      <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+    
+        <title>Movie reviews</title>
       
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
       
@@ -79,21 +85,6 @@ This is three.
 </p>
 </div>
 
-.screen {display:none;min-height:200px;color:white; padding:15px;}
-#one{background-color: red;}
-#two{background-color: green;}
-#three{background-color: blue;}
-// show the home screen
-$("#one").show();
-
-// when a nav link is clicked, hide screens then show target
-
-$("nav a").on("click", function() {
-	$(".screen").hide();
-  var targetSelector = $(this).attr("href");
-  console.log(targetSelector)
-  $(targetSelector).show();
-});
     <script>
         $("#template").hide();
         
@@ -128,6 +119,22 @@ $("nav a").on("click", function() {
             throw err;
         });
         }
+        
+        function loadResponse(response) {
+                console.log(response);
+                console.log(response.results);
+                $("#numResults").text("Received " + response.results.length + " results.");
+                $.each(response.results, function(i, v) {
+                    var template = $("#template").clone();
+                    template.find("img").attr("src", v["multimedia"]["src"]);
+                    template.find("h5").text(v["headline"]);
+                    template.find("h6").text(v["byline"]);
+                    template.find("p").text(v["summary_short"]);
+                    template.find("a").attr("href", v["link"]["url"]);
+                    template.show();
+                    $("#results").append(template);
+                });
+            }
         
         $("#btn").on("click", doSearch);
     </script>
