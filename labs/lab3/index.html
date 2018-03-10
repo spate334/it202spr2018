@@ -20,9 +20,9 @@
       var ctx=c.getContext("2d");
       var circleX = c.width;
       var game = {lives: 3, score: 0, state: "play", level: 1};
-      var harm = {x: 75, y: 50, color:"green", radius: 25, direction: {x: 1, y: 1}, img:"circle"};
-      var benefit = {x: 150, y: 50, color:"purple", radius: 5, direction: {x: 1, y: -1}, img:"circle"};
-      var player = {x: 25, y: 50, color:"red", radius: 25, playerSpeed:1, img:"circle"};
+      var harm = {x: 75, y: 50, color:"green"};
+      var benefit = {x: 150, y: 50, color:"purple"};
+      var player = {x: 25, y: 50, color:"red"};
       var keys = [];
       
       function col(obj1, obj2) {
@@ -49,14 +49,7 @@
         function draw() {
         ctx.clearRect(0, 0, c.width, c.height);
         ctx.font = "8px Times verdana";
-        var stats = "Score:" + game.score +" Level:"+game.level + " Lives:" + p1.life + " Till Next Level: "+ (5 *game.level-game.levelCounter);
-        var multiplier =1;
-        ctx.fillText(stats ,10,50);
-         if (game.levelCounter == 5 * (game.level)) {
-                game.level += 1;
-                game.levelCounter = 1;
-                multiplier+= .5;
-            }
+        ctx.fillText("Lives: " + game.lives + " Score: " + game.score + " Level: " + game.level, c.width / 2, 10);
         drawBackground();
         
         harm.x -= (game.level);
