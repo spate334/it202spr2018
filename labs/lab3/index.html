@@ -18,11 +18,11 @@
       c.width = 500;
       c.height = 300;
       var ctx=c.getContext("2d");
-      
+      var circleX = c.width;
       var game = {lives: 3, score: 0, state: "play", level: 1};
-      var harm = {x: 75, y: 50, color:"red", radius: 25, direction: {x: 1, y: 1}, img:"X"};
-      var benefit = {x: 150, y: 50, color:"green", radius: 5, direction: {x: 1, y: -1}, img:"check"};
-      var player = {x: 25, y: 50, color:"blue", radius: 25, playerSpeed:1, img:"circle"};
+      var harm = {x: 75, y: 50, color:"green", radius: 25, direction: {x: 1, y: 1}, img:"circle"};
+      var benefit = {x: 150, y: 50, color:"purple", radius: 5, direction: {x: 1, y: -1}, img:"circle"};
+      var player = {x: 25, y: 50, color:"red", radius: 25, playerSpeed:1, img:"circle"};
       var keys = [];
       
       function col(obj1, obj2) {
@@ -57,7 +57,8 @@
                 game.levelCounter = 1;
                 multiplier+= .5;
             }
-            
+        drawBackground();
+        
         harm.x -= (game.level);
         benefit.x--;
         
@@ -87,30 +88,58 @@
         ctx.arc(player.x,player.y,player.radius,0,2*Math.PI);
         ctx.fill();
         
-        if (game.state == "play") {
-         
-          checkColy(player, harm, function(dx, dy) {
-            game.lives--;
-            harm.x = c.width - harm.radius;
-            harm.y = Math.random() * c.height;
-            harm.radius = Math.random() * 25;
-            if (harm.radius < 5)
-              harm.radius = 5;
-          });
-          
-          
-          checkCol(player, benefit, function(dx, dy) {
-            game.score += 100;
-            benefit.x = c.width - harm.radius;
-            benefit.y = Math.random() * c.height;
-            benefit.radius = Math.random() * 25;
-            if (benefit.radius < 5)
-              benefit.radius = 5;
-            
-            if (game.score % 1000 == 0)
-              game.level++;
-          });
+        var dx = player.x - benefit.x;
+        var dy = player.y - benefit.y;
+        var distance = Math.sqrt(dx * dx + dy * dy);
         
-        drawBackground();
+        if (distance < player.radius + benefit.radius) {
+  
+            game.score+=100;
+            benefit.x = c.width;
+            benefit.y = Math.floor((Math.random() * c.height) + 1);
+            if(game.score % 100 == 0) {
+              game.level++;
+            }
+        }
+        
+        var dx2 = player.x - harm.x;
+        var dy2 = player.y - harm.y;
+        var distance2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+        
+        if (distance2 < player.radius + harm.radius) {
+            game.livesLeft--;
+            harm.y = Math.floor((Math.random() * c.height) + 1);
+            harm.x = c.width;
+            if(game.livesLeft == 0){
+              game.state = "End";
+              ctx.fillRect(0,0,c.width,c.height);
+              ctx.clearRect(0,0,c.width,c.height);
+              ctx.fillStyle = "black";
+              
+              
+              ctx.font = "30px Arial";
+              ctx.fillStyle = "Green";
+              ctx.fillText("Game Over! ",10,50);
+              
+            }
+        }
+           if(game.state == "play") {
+          requestAnimationFrame(draw);
+          
+        }
+      }
+          
+     $(document).on('keydown', function(event) {
+        keys[event.keyCode] = true;
+      });
+      
+      $(document).on('keyup', function(event) {
+        keys[event.keyCode] = false;
+      });
+      
+      draw();
+    </script>
+  </body>
+</html>
         
         
