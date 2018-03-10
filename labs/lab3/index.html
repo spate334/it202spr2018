@@ -31,6 +31,7 @@
             var distance = Math.sqrt(dx * dx + dy * dy);
             return distance - (obj1.radius + obj2.radius) <= 0;
         }
+       
        function init(){
             player = new player(3);
             var beni = new benefit(Math.floor(Math.random() * c.height), 5);
@@ -40,7 +41,7 @@
             harm.push(h1);
         }
         
-         function drawBackground() {
+        function drawBackground() {
         ctx.beginPath();
         ctx.drawImage($("#background")[0], 0, 0, c.width, c.height);
       }
@@ -48,6 +49,67 @@
         function draw() {
         ctx.clearRect(0, 0, c.width, c.height);
         ctx.font = "8px Times verdana";
+        var stats = "Score:" + game.score +" Level:"+game.level + " Lives:" + p1.life + " Till Next Level: "+ (5 *game.level-game.levelCounter);
+        var multiplier =1;
+        ctx.fillText(stats ,10,50);
+         if (game.levelCounter == 5 * (game.level)) {
+                game.level += 1;
+                game.levelCounter = 1;
+                multiplier+= .5;
+            }
+            
+        harm.x -= (game.level);
+        benefit.x--;
+        
+        
+        if(harm.x <= 0) {
+          harm.y = Math.floor((Math.random() * c.height) + 1);
+          harm.x = c.width;
+        }
+        
+        if(benefit.x <= 0) {
+          benefit.x = c.width;
+          benefit.y = Math.floor((Math.random() * c.height) + 1);
+        }
+        
+        ctx.fillStyle = harm.color;
+        ctx.beginPath();
+        ctx.arc(harm.x,harm.y,harm.radius,0,2*Math.PI);
+        ctx.fill();
+        
+        ctx.fillStyle = benefit.color;
+        ctx.beginPath();
+        ctx.arc(benefit.x,benefit.y,benefit.radius,0,2*Math.PI);
+        ctx.fill();
+        
+        ctx.fillStyle = player.color;
+        ctx.beginPath();
+        ctx.arc(player.x,player.y,player.radius,0,2*Math.PI);
+        ctx.fill();
+        
+        if (game.state == "play") {
+         
+          checkColy(player, harm, function(dx, dy) {
+            game.lives--;
+            harm.x = c.width - harm.radius;
+            harm.y = Math.random() * c.height;
+            harm.radius = Math.random() * 25;
+            if (harm.radius < 5)
+              harm.radius = 5;
+          });
+          
+          
+          checkCol(player, benefit, function(dx, dy) {
+            game.score += 100;
+            benefit.x = c.width - harm.radius;
+            benefit.y = Math.random() * c.height;
+            benefit.radius = Math.random() * 25;
+            if (benefit.radius < 5)
+              benefit.radius = 5;
+            
+            if (game.score % 1000 == 0)
+              game.level++;
+          });
         
         drawBackground();
         
