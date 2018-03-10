@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>repl.it</title>
+  </head>
+  <body>
+    <canvas id="myCanvas"></canvas>
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous">
+      </script>
+    <script>
+    
+    var c=document.getElementById("myCanvas");
+      c.width = 500;
+      c.height = 300;
+      var ctx=c.getContext("2d");
+      
+      var game = {lives: 3, score: 0, state: "play", level: 1};
+      var harm = {x: 75, y: 50, color:"red", radius: 25, direction: {x: 1, y: 1}, img:"X"};
+      var benefit = {x: 150, y: 50, color:"green", radius: 5, direction: {x: 1, y: -1}, img:"check"};
+      var player = {x: 25, y: 50, color:"blue", radius: 25, playerMovementSpeed:1, img:"circle"};
+      var keys = [];
+      
+      function col(obj1, obj2) {
+            var dx = obj1.x - obj2.x;
+            var dy = obj1.y - obj2.y;
+            var distance = Math.sqrt(dx * dx + dy * dy);
+            return distance - (obj1.radius + obj2.radius) <= 0;
+        }
+      
+      
