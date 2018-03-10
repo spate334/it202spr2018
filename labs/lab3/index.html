@@ -22,7 +22,7 @@
       var game = {lives: 3, score: 0, state: "play", level: 1};
       var harm = {x: 75, y: 50, color:"red", radius: 25, direction: {x: 1, y: 1}, img:"X"};
       var benefit = {x: 150, y: 50, color:"green", radius: 5, direction: {x: 1, y: -1}, img:"check"};
-      var player = {x: 25, y: 50, color:"blue", radius: 25, playerMovementSpeed:1, img:"circle"};
+      var player = {x: 25, y: 50, color:"blue", radius: 25, playerSpeed:1, img:"circle"};
       var keys = [];
       
       function col(obj1, obj2) {
@@ -31,5 +31,24 @@
             var distance = Math.sqrt(dx * dx + dy * dy);
             return distance - (obj1.radius + obj2.radius) <= 0;
         }
-      
-      
+       function init(){
+            player = new player(3);
+            var beni = new benefit(Math.floor(Math.random() * c.height), 5);
+            var h1 = new harm(Math.floor(Math.random() * c.height), 5);
+            game.state = "started"
+            benefit.push(beni);
+            harm.push(h1);
+        }
+        
+         function drawBackground() {
+        ctx.beginPath();
+        ctx.drawImage($("#background")[0], 0, 0, c.width, c.height);
+      }
+        
+        function draw() {
+        ctx.clearRect(0, 0, c.width, c.height);
+        ctx.font = "8px Times verdana";
+        
+        drawBackground();
+        
+        
