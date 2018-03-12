@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+    
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+
+<body>
+<div id="btn">
+    <button class="mdc-button">
+      <i class="material-icons mdc-button__icon">favorite</i>
+      Click for Restaurants
+    </button>
+</div>
+
+<div id="results"></div> 
+
+    
+
+
+
+<script>
+$("#btn").click(function() {
+    
+    var db = new Dexie("AppDB");
+    db.version(1).stores({
+    restaurants: "++id, name, cuisine"
+        
+    });
+    
+    db.restaurants.bulkAdd({name: "Curry on fire", cuisine: "Indian"},
+    {name: "Busy Burger", cuisine: "American"},
+    {name: "Golden Thai", cuisine: "Thai"});
+    
+    var next=db.restaurants.where('cuisine').noneOf([1]);
+    
+    $("#results").append(next);
+    $(next).show()
+    
+ });
+    
+    
+</script>
+</body>
