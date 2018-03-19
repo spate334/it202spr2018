@@ -1,0 +1,17 @@
+<html>
+<head>
+
+</head>
+<body>
+<script>
+    if('caches' in window){
+        caches.open('IMG').then(function(cache){
+            cache.addAll(['/', '/images/logo.png'])
+    .then(function() { 
+      // Cached!
+    });
+        });
+    }
+</script>
+</body>
+</html>
