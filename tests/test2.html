@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sagar PatelTest 2</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            $.get("https://data.cityofchicago.org/resource/tt4n-kn4t.json?full_or_part_time=P&department=CITY COUNCIL")
+            .done(function(answer) {
+                $.each(answer, function(i, p) {
+                    var employee = $("<p></p>").text(p.name + " = " + p.job_titles + "");
+                    $("body").append(employee);
+                });
+            });
+        </script>
+    </body>
+</html>
