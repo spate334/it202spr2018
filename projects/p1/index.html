@@ -21,20 +21,29 @@
    
     <!-- Custom styles for this template -->
     <link href="css/landing-page.min.css" rel="stylesheet">
+    <link href="css/draggable.css" rel="stylesheet">
     
   </head>
     <script type="text/javascript" src="scroll.js"></script>
     <link rel="stylesheet" type="text/css" href="main.css" />
+    
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
  
   <body
    #mainNav{background-color:#001E62}#mainNav .navbar-toggler{font-size:20px;right:0;padding:13px;text-transform:uppercase;color:#fff;border:0;background-color:#D50032;font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif}
   #mainNav .navbar-brand{color:#D50032;font-family:'Kaushan Script','Helvetica Neue',Helvetica,Arial,cursive}#mainNav .navbar-brand.active,#mainNav .navbar-brand:active,#mainNav .navbar-brand:focus,#mainNav .navbar-brand:hover{color:#fec503}#mainNav .navbar-nav .nav-item .nav-link{font-size:90%;font-weight:400;padding:.75em 0;letter-spacing:1px;color:#	#D50032;font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif}#mainNav .navbar-nav .nav-item .nav-link.active,#mainNav .navbar-nav .nav-item .nav-link:hover{color:#00008B}@media (min-width:992px){#mainNav{padding-top:25px;padding-bottom:25px;-webkit-transition:padding-top .3s,padding-bottom .3s;-moz-transition:padding-top .3s,padding-bottom .3s;transition:padding-top .3s,padding-bottom .3s;border:none;background-color:transparent}#mainNav .navbar-brand{font-size:3.0em;-webkit-transition:all .3s;-moz-transition:all .3s;transition:all .3s}#mainNav .navbar-nav .nav-item .nav-link{padding:1.1em 1em!important}#mainNav.navbar-shrink{padding-top:0;padding-bottom:0;background-color:#001E62}#mainNav.navbar-shrink .navbar-brand{font-size:2.0em;padding:12px 0}}header.masthead{text-align:center;color:#fff;background-image:url(../img/header-bg.jpg);background-repeat:no-repeat;background-attachment:scroll;background-position:center center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover}
+   
+   
      
      
-     
-  .carousel-item {
-  height: 75vh;
-  min-height: 150px;
+   <style>  
+    .carousel-item {
+  height: 65vh;
+  min-height: 300px;
   background: no-repeat center center scroll;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -87,6 +96,7 @@
     border-top: 1px solid rgba(0, 0, 0, .05) !important;
     background: #fff;
 }
+</style>
     <!-- Navigation -->
     <nav class="navbar navbar-light bg-light static-top">
       <div class="container">
@@ -176,20 +186,54 @@
         </div>
       </div>
     </section>
+    
+    <section class="features-icons bg-light text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+              <div class="features-icons-icon d-flex">
+                <i class="icon-screen-desktop m-auto text-primary"></i>
+              </div>
+              <h3>Fully Responsive</h3>
+              <p class="lead mb-0">This theme will look great on any device, no matter the size!</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+              <div class="features-icons-icon d-flex">
+                <i class="icon-layers m-auto text-primary"></i>
+              </div>
+              <h3>Bootstrap 4 Ready</h3>
+              <p class="lead mb-0">Featuring the latest build of the new Bootstrap 4 framework!</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+              <div class="features-icons-icon d-flex">
+                <i class="icon-check m-auto text-primary"></i>
+              </div>
+              <h3>Easy to Use</h3>
+              <p class="lead mb-0">Ready to use with your own content, or customize the source files!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Image Showcases -->
     <section class="showcase">
       <div class="container-fluid p-0">
         <div class="row no-gutters">
 
-         <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('https://marketingland.com/wp-content/ml-loads/2016/08/ss-pharmaceuticals-pills-drugs-medical-health.jpg');"></div>
+         <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('https://www.jellyvision.com/wp-content/uploads/2015/10/CIW_JV_1016-5-140.jpg');"></div>
           <div class="col-lg-6 order-lg-1 my-auto showcase-text">
             <h2>How we started?</h2>
             <p class="lead mb-0">Jellyvision talks people through big life decisions, like selecting a health insurance plan, saving for retirement, managing finances, and navigating a career..</p>
           </div>
         </div>
         <div class="row no-gutters">
-          <div class="col-lg-6 text-white showcase-img" style="background-image: url('http://demanddebate.com/wp-content/uploads/2017/06/science5.jpg');"></div>
+          <div class="col-lg-6 text-white showcase-img" style="background-image: url('https://www.pfl.com/pflblog/wp-content/uploads/2017/03/Jellyvision-logo-PFL-Tactile-Marketing-Automation.jpg');"></div>
           <div class="col-lg-6 my-auto showcase-text">
             <h2>What we do?</h2>
             <p class="lead mb-0">Our recipe: behavioral science, cutting-edge tech, great writing, purposeful humor, original animation, and oregano.</p>
@@ -231,7 +275,7 @@
                             <a href="#">Sales manager</a>
                         </div>
                         <div class="card-text">
-                            John is a sales manager at our company.
+                            Ken is a sales manager at our company.
                         </div>
                     </div>
                     <div class="card-footer">
@@ -254,7 +298,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <span class="float-right">Joined in 2004</span>
+                        <span class="float-right">Joined in 2014</span>
                         <span><i class=""></i>Graduate of Harvard</span>
                     </div>
                 </div>
@@ -264,17 +308,17 @@
                 <div class="card">
                     <img class="card-img-top" src="http://www.bestofsampleresume.com/wp-content/uploads/2016/05/human-resource-manager-resume.jpg">
                     <div class="card-block">
-                        <h4 class="card-title">Homer Simpson</h4>
+                        <h4 class="card-title">Bart Simpson</h4>
                         <div class="meta">
                             <a href="#">Employee</a>
                         </div>
                         <div class="card-text">
-                            Derek is a business analyst in our company.
+                            Bart is a business analyst in our company.
                         </div>
                     </div>
                     <div class="card-footer">
-                        <span class="float-right">Joined in 2006</span>
-                        <span><i class=""></i>Graduate of NYU</span>
+                        <span class="float-right">Joined in 2008</span>
+                        <span><i class=""></i>Graduate of BYU</span>
                     </div>
                 </div>
           </div>
@@ -307,6 +351,48 @@
         </div>
       </div>
     </section>
+    
+    <div id="contact" class="container-fluid bg-light">
+      <h2 class="text-center">CONTACT</h2>
+      <div class="row">
+        <div class="col-sm-5">
+          <p>Contact us and we'll get back to you within 24 hours.</p>
+          <p><span class="fas fa-map-marker-alt"></span> Chicago, US</p>
+          <p><span class="fas fa-mobile-alt"></span> +1 (800) 224-8512</p>
+          <p><span class="fas fa-envelope"></span> Jellyvision.com/Jobs</p>
+        </div>
+        <div class="col-sm-7">
+          <div class="row">
+            <div class="col-sm-6 form-group">
+              <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
+            </div>
+            <div class="col-sm-6 form-group">
+              <input class="form-control" id="email" name="email" placeholder="Email" type="email" required>
+            </div>
+          </div>
+          <textarea class="form-control" id="comments" name="comments" placeholder="Comment" rows="5"></textarea><br>
+          <div class="row">
+            <div class="col-sm-12 form-group">
+              <button class="btn btn-default pull-right" type="submit">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <!-- Add Google Maps -->
+  <div id="googleMap" style="height:400px;width:100%;"></div>
+  <script>
+    function myMap() {
+    var myCenter = new google.maps.LatLng(41.886758, -87.652170);
+    var mapProp = {center:myCenter, zoom:15, scrollwheel:false, draggable:false, mapTypeId:google.maps.MapTypeId.ROADMAP};
+    var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    var marker = new google.maps.Marker({position:myCenter});
+    marker.setMap(map);
+    }
+  </script>
+  
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQyLGwnCtIk4or4ZAllJ2XOzHNAYD5Aio&callback=myMap"></script>
 
     <!-- Footer -->
     <footer class="footer bg-light">
@@ -354,27 +440,6 @@
         </div>
       </div>
     </footer>
-    
-     <!-- Add Google Maps -->
-  <div id="googleMap" style="height:400px;width:100%;"></div>
-  <script>
-    function myMap() {
-    var myCenter = new google.maps.LatLng(41.886758, -87.652170);
-    var mapProp = {center:myCenter, zoom:15, scrollwheel:false, draggable:false, mapTypeId:google.maps.MapTypeId.ROADMAP};
-    var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
-    var marker = new google.maps.Marker({position:myCenter});
-    marker.setMap(map);
-    }
-  </script>
-  
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQyLGwnCtIk4or4ZAllJ2XOzHNAYD5Aio&callback=myMap"></script>
-
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
   </body>
 
