@@ -10,8 +10,6 @@
 
     </head>
     <body>
-        <h1>Fun with Camera, Canvas and Google Cloud Vision Face Detection</h1>
-        <p>When you click the button, the script will capture the current video frame, send it to Google Cloud Vision, get the bounding box of the face from the response data (and a TODO is to handle the "no face" condition, which currently stops the script), then pastes just the face into another canvas, making a collage of faces.  Another update is to make it copy/paste <em>all</em> the faces in the image;  currently, it just handles the first.</p>
         <video id="player" controls autoplay></video>
         <button id="capture">Capture</button>
         <div id="templateFace">
@@ -80,31 +78,22 @@
             $.ajax({
                 method: "POST",
                 contentType: "application/json",
-                url: "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyAM-NxYi-E6HD1N18M75-jbqIwuo-CDzSA",
+                url: "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBxjK4p_QD1fOMIzyLATJ80ueHmzRRjiy8",
                 data: JSON.stringify(requestBody)
               })
                 .done(function(response) {
                   if (f[0].faceAnnotations != undefined && f[0].faceAnnotations.length > 0) {
-                      // calculate start position and size
-                      var vertices = f[0].faceAnnotations[0].boundingPoly.vertices; // only take first face
+                      var face = $("#templateFace").clone().attr("id", "face" + currentId);
+                      face.find("canvas").attr("width", width).attr("height", height);
+                      const canvas2 = face.find("canvas").get(0);
+                      currentId += 1;
+                      
+                      var vertices = f[0].faceAnnotations[0].boundingPoly.vertices; 
                       var startX = vertices[0].x;
                       var startY = vertices[0].y;
                       var width = vertices[2].x - vertices[0].x;
                       var height = vertices[2].y - vertices[0].y;
                       
-                      var face = $("#templateFace").clone().attr("id", "face" + currentId);
-                      face.find("canvas").attr("width", width).attr("height", height);
-                      const canvas2 = face.find("canvas").get(0);
-                      currentId += 1;
-                  
-                  // determine width and height for cropping
-                  var faceWidth = bottomRight.x - topLeft.x;
-                  var faceHeight = bottomRight.y - topLeft.y;
-                  var sourceX = topLeft.x;
-                  var sourceY = topLeft.y;
-                  var destWidth = faceWidth;
-                  var destHeight = faceHeight;
-
 
                   // check to see whether we need to start a new row or column
                    var labels = "";
