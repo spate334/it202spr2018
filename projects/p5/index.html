@@ -4,8 +4,10 @@
         <title>Media</title>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <style>
-          #frameCanvas {display:none;}
-          button {font-size: 2em;}
+           #templateFace,
+          #canvas {
+            display: none;
+          }
         </style>
 
     </head>
@@ -13,8 +15,8 @@
         <video id="player" controls autoplay></video>
         <button id="capture">Capture</button>
         <div id="templateFace">
-          <canvas style="display: inline-block"><!-- Face of image goes here --></canvas>
-          <p style="display: inline-block"><!-- Labels go here --></p>
+        <canvas style="display: inline-block"></canvas>
+        <p style="display: inline-block"></p>
         </div>
         <canvas id="canvas" width=320 height=240></canvas>
         <div id="imageData"></div>
