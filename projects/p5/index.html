@@ -24,6 +24,7 @@
 
         
         <script>
+          var currentId = 0;
           const player = document.getElementById('player');
           const frameCanvas = document.getElementById('frameCanvas');
           const collageCanvas = document.getElementById('collageCanvas');
@@ -31,10 +32,9 @@
           const context = canvas.getContext('2d');
           const captureButton = document.getElementById('capture');
           var requestBody = "";
-          var doFaceCapture = false;
           
-          collageCanvas.width = window.innerWidth;
-          collageCanvas.height = 300;
+          //collageCanvas.width = window.innerWidth;
+          //collageCanvas.height = 300;
           
           const constraints = {
             video: true,
