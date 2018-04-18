@@ -21,7 +21,7 @@
               <div class="mdc-top-app-bar__row">
                 <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
                   <a href="#" class="material-icons mdc-top-app-bar__navigation-icon">menu</a>
-                  <span class="mdc-top-app-bar__title">My Cool App</span>
+                  <span class="mdc-top-app-bar__title">Sagar Patel</span>
                 </section>
               </div>
             </header>
@@ -156,16 +156,14 @@
             
             $("#resultList li").not("#template").remove();
             $.each(response.near_earth_objects , function(k,v) {
-              $.each(v, function(i,v1) {
+              $.each(v, function(i,v) {
                 
                 clone = $("#template").clone().removeClass("hidden");
-                clone.find(".mdc-list-item__text").text("Asteroid Name: " + v1.name + " Date recorded: " + v1.close_approach_data[0].close_approach_date);
+                clone.find(".mdc-list-item__text").text("Asteroid Name: " + v2.name + " Date recorded: " + v2.close_approach_data[0].close_approach_date);
                 // secondary text
                 secondaryText = $("<span>").addClass("mdc-list-item__secondary-text");
-                secondaryText.text("Estimated diameter in meters: " 
-                  + v1.estimated_diameter.meters.estimated_diameter_min
-                  + " to "
-                  + v1.estimated_diameter.meters.estimated_diameter_max );
+                secondaryText.text("Estimated diameter in meters: "  + v2.estimated_diameter.meters.estimated_diameter_min
+                  + " to "+ v2.estimated_diameter.meters.estimated_diameter_max );
                 clone.find(".mdc-list-item__text").append(secondaryText);
                 
                 // link to nasa_jpl_url
