@@ -79,16 +79,16 @@
                         <button id="arrivalsNav" class="mdc-toolbar__menu-icon mdc-fab material-icons" aria-label="Location" data-mdc-auto-init="MDCRipple">
                             <span class="mdc-fab__icon">Estimated Arrivals</span>
                         </button>
-                        <button id="btnNearme" class="mdc-toolbar__menu-icon mdc-fab material-icons" aria-label="Settings" data-mdc-auto-init="MDCRipple">
-                            <span class="mdc-fab__icon">Near Me</span>
-                        <button id="btnSettings" class="mdc-toolbar__menu-icon mdc-fab material-icons" aria-label="Settings" data-mdc-auto-init="MDCRipple">
-                            <span class="mdc-fab__icon">settings</span>
+                        <button id="btnDistance" class="mdc-toolbar__menu-icon mdc-fab material-icons" aria-label="Distance" data-mdc-auto-init="MDCRipple">
+                            <span class="mdc-fab__icon">Distance</span>
+                        <button id="btnAroundme" class="mdc-toolbar__menu-icon mdc-fab material-icons" aria-label="Aroundme" data-mdc-auto-init="MDCRipple">
+                            <span class="mdc-fab__icon">Around Me</span>
                         </button>
                     </section>
                 </div>
             </div>
             
-    //Firstscreen
+
 	<div id="arrivals">
 		<br><br><br>
 		//racine image
@@ -138,15 +138,38 @@
 				</div>
 			</div>
 		</div>
-		//second screen
-		<div id="nearMe" class="hide">
+  </div>
+  
+		<div id="distanceScreen" class="hide">
+		<br><br><br><br>
+		<div class="container">
+			<div id="distanceDiv" class="mdc-select">
+				<select id="distanceSelect" class="mdc-select__native-control">
+					<option id="disabledOption" value="" disabled selected></option>
+					<option value="19">0.1 miles</option>
+					<option value="18">0.3 miles</option>
+					<option value="17">0.5 miles</option>
+					<option value="16">1.0 miles</option>
+				</select>
+				<div class="mdc-select__label">'Around Me' radius within</div>
+				<div class="mdc-select__bottom-line"></div>
+			</div>
+			<br><br><br><br>
+			<button id="saveChanges" class="mdc-button submitBtn" disabled><strong>Save Changes</strong></button>
+			<div class="results">
+				<ul id="saveResults" class="mdc-list">
+					<li class="mdc-list-item hide">Single-line item</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+		
+		
+		<div id="aroundMe" class="hide">
 		<br><br><br>
 		<div id="map"></div>
-	</div>
 </div>
-</div>
-	//third screen
-	
+	<script type="text/javascript" src="">
 	$(document).ready(function(){
 	   		console.log("Document Ready");
 	   	});
@@ -262,6 +285,426 @@
 			}
 			return stop;
 		}
+		navListener("#arrivalsNav", "#arrivalsScreen", "#aroundMeNav", "#aroundMeScreen", "#distanceNav", "#distanceScreen");
+		navListener("#aroundMeNav", "#distanceScreen", "#arrivalsNav", "#arrivalsScreen", "#distanceNav", "#distanceScreen");
+		navListener("#distanceNav", "#aroundMeScreen", "#arrivalsNav", "#arrivalsScreen", "#aroundMeNav", "#aroundMeScreen");
+		
+		function navListener(mainNav, mainScreen, nav2, screen2, nav3, screen3){
+			$(mainNav).click(function(){
+				$(mainNav).addClass("mdc-list-item--activated");
+				$(nav2).removeClass("mdc-list-item--activated");
+				$(nav3).removeClass("mdc-list-item--activated");
+				$(mainScreen).removeClass("hide");
+				$(screen2).addClass("hide");
+				$(screen3).addClass("hide");
+				drawer.open = false;
+			});
+		}
+		
+		colors = {
+			
+	   		"008S": "#000080",
+	   		"008N": "#000080",
+	   		"012E": "#808000",
+	   		"012W": "#808000",
+	   		"060E": "#800080",
+    		"060W": "#800080",
+    		"157E": "#FFD700",
+    		"157W": "#FFD700",
+		}
+		
 			varCurrent = "4/22/2018 7:00:00";
 			var busTime = "http://ctabustracker.com/bustime/api/v2/gettime&key=7hV55iRDcTmvtMmgg2y9g5JWS&format=json";
+			//found this code online
+			function getTime(){
+	   		$.ajax({
+		        url: proxy + timeURL,
+		        method: 'GET',
+		     }).done(function(response) {
+			    	response = JSON.parse(response);
+			    	var time = response["bustime-response"]["tm"];
+			    	time = insertToString(time, "/", 4);
+			    	time = insertToString(time, "/", 7);
+			    	Current = time;
+			    }).fail(function(err) {
+				   		throw err;
+			       });
+	   	}
+	   	tabListener("#busNav", "#busTab");
+   		
+   		function tabListener(mainNav, mainTab, otherNav, otherTab){
+			$(mainNav).click(function(){
+		   		$(mainNav).addClass("mdc-tab--active");
+		   		$(otherNav).removeClass("mdc-tab--active");
+		   		$(mainTab).removeClass("hide");
+		   		$(otherTab).addClass("hide");
+		   	});
+		}
+	   	function insertToString(main_string, ins_string, pos){
+	   		if (typeof(pos) == "undefined") 
+	   			pos = 0;
+	   		if(typeof(ins_string) == "undefined") 
+	   			ins_string = '';
+	   		return main_string.slice(0, pos) + ins_string + main_string.slice(pos);
+	   	}
+	   	function millisToMinutesAndSeconds(millis) {
+	   		var mins = Math.floor(millis / 60000);
+	   		var seconds = ((millis % 60000) / 1000).toFixed(0);
+	   		return mins + ":" + (seconds < 10 ? '0' : '') + seconds;
+	   		}
+	   		
+	   		$("#busDirection").change(function(){
+			document.getElementById("busSubmitBtn").disabled = true;
+			var route = document.getElementById("busRoute").value;
+			var dir = document.getElementById("busDirection").value;
+			switch (route){
+				case "8":
+					if (dir === "Northbound")
+						addOptions("008N");
+					else
+						addOptions("008S");
+					break;
+				case "12":
+					if (dir === "Eastbound")
+						addOptions("012E");
+					else
+						addOptions("012W");
+					break;
+				case "60":
+					if (dir === "Eastbound")
+						addOptions("060E");
+					else
+						addOptions("060W");
+					break;
+				case "157":
+					if (dir === "Eastbound")
+						addOptions("157E");
+					else
+						addOptions("157W");
+					break;
+				default:
+					console.log("error in busDirection change action listener");
+			}
+		});	
+		$("#busStop").change(function(){
+			document.getElementById("busSubmitBtn").disabled = false;
+		});
+		
+			function addSelections(key){
+			var busStopSelect = document.getElementById("busStopSelect");
+			$('#busStopSelect').children('option1:not(:first)').remove();
+			$.each(busStopsArr[key], function(i, v){
+				var option1 = document.createElement("option");
+				option1.text = v.stpnm;
+				option1.value = v.stpnm;
+				busStopSelect.add(option);
+			});
+				if (key === "007W" || key === "060W"){
+				$.each(busStopsArr["SMEW"], function(i, v){
+					var option = document.createElement("option");
+					option.text = v.stpnm;
+					option.value = v.stpnm;
+					busStopSelect.add(option);
+			}
+			else if (key === "007E" || key === "060E"){
+				$.each(busStopsArr["SMEE"], function(i, v){
+					var option = document.createElement("option");
+					option.text = v.stpnm;
+					option.value = v.stpnm;
+					busStopSelect.add(option);
+				});
+				});
+			}
+		}
+		mdc.ripple.MDCRipple.attachTo(document.querySelector('.mdc-button'));
+   		const busStopSelect = new mdc.select.MDCSelect(document.querySelector("#busStop"));
+		const busRoute = new mdc.select.MDCSelect(document.querySelector("#busRoute"));
+		const busDirection = new mdc.select.MDCSelect(document.querySelector("#busDirection"));
+	   	$("#busRoute").change(function(){
+	   		document.getElementById("busSubmitBtn").disabled = true;
+			var busRouteSelect = document.getElementById("busRoute");
+			var clickedValue = busRouteSelect.options[busRoute.selectedInfo].value;
+			var busDirection = document.getElementById("busDirection");
+			$('#busDirection').children('option:not(:first)').remove();
+			var option1 = document.createElement("option");
+			var option2 = document.createElement("option");
+			if (clickedValue === "8") {
+				option1.text = "Northbound";
+				option1.value = "Northbound";
+				busDirectionSelect.add(option);
+				option2.text = "Southbound";
+				option2.value = "Southbound";
+				busDirectionSelect.add(option2);
+			}
+			else {
+				option1.text = "Eastbound";
+				option1.value = "Eastbound";
+				busDirectionSelect.add(option);
+				option2.text = "Westbound";
+				option2.value = "Westbound";
+				busDirectionSelect.add(option2);
+			}
+			$("#busDirectionSelect").prop("selectedInfo",0);
+			$('#busStopSelect').children('option:not(:first)').remove();
+		
+		
+		$("#busSubmitBtn").click(function(){
+			var busDisplayUL = document.getElementById("busResults");
+			var li = document.createElement("li");
+    		$(li).addClass("mdc-list-item");
+    		$(li).css("background-color", "#E2E2E2");
+    		li.appendChild(document.createTextNode("Loading..."));
+    		busDisplayUL.appendChild(li);
+       	var transit = "http://ctabustracker.com/bustime/api/v2/getpredictions&key=7hV55iRDcTmvtMmgg2y9g5JWS=";
+		var end = route + "&stpid=" + clkdStp.stpid + "&format=json";
+		transit += end;
+		var url = proxy + cta;
+		getTime();
+		function busColor(mins){
+			if (parseInt(mins) <= 8)
+				return "#8B0000";
+			else if (parseInt(mins) <= 16)
+				return "##FFA500";
+			else
+				return "##483D8B";
+		}
+		var clkdStp = findStop(stopName, dir);
+		var route = document.getElementById("busRoute").value;
+		var dir = document.getElementById("busDirection").value;
+		var stopName = document.getElementById("busStopSelect").value;
+		
+		$.ajax({
+		        url: url,
+		        method: 'GET',
+		    })
+		// this function is if there are no scheduled stops
+	    .done(function(response) {
+				    response = JSON.parse(response);
+				    if (response["bustime-response"]["error"]){
 			
+						$(busDisplayUL).empty();
+				    	var li = document.createElement("li");
+			    		$(li).addClass("mdc-list-item");
+			    		$(li).css("background-color", "#E2E2E2");
+			    		li.appendChild(document.createTextNode("CTA API: No Service Scheduled"));
+			    		busDisplayUL.appendChild(li);
+				    }
+				    else{
+						$(busDisplayUL).empty();
+				    	$.each(response["bustime-response"]["prd"], function(i, v){
+				    		var predictedArrival = v.prdtm;
+				    		estimatedArrival = insertToString(estimatedArrival, "/", 4);
+				    		estimatedArrival = insertToString(estimatedArrival, "/", 7);
+				    		var li = document.createElement("li");
+			    			$(li).addClass("mdc-list-item");
+				    		
+				    		var diff = Math.abs(new Date(estimatedArrival) - new Date(Current));
+				    		diff = millisToMinutesAndSeconds(diff);
+				    		var mins = diff.split(":")[0];
+				    		
+				    		if (parseInt(mins) <= 0){
+				    			$(li).css("background-color", "##4682B4");
+				    			li.appendChild(document.createTextNode("APPROACHING"));
+				    		}
+				    		else if (parseInt(mins) < 50){
+				    			$(li).css("background-color", timeColor(mins));
+				    			li.appendChild(document.createTextNode(mins + " minutes away"));
+				    		}
+				    		else{
+				    			$(li).css("background-color", "##800000");
+				    			li.appendChild(document.createTextNode("Error: try again"));
+				    		}
+				    		
+				    		busDisplayUL.appendChild(li);
+					    });
+				    }
+			    })
+			    .fail(function(err) {
+				   		throw err;
+			       });
+		});
+		
+		
+		
+		var db = new Dexie('UIC Bus Tracker-Distance');
+		
+		db.version(1).stores({
+ 		favorites: 'id,value'
+	   	});
+	   	db.open().catch(function(err){
+	   	console.log("Error trying to open database");
+	   	});
+	   	
+	   	$("#distanceSelect").change(function(){
+		document.getElementById("saveChanges").disabled = false;
+		});
+		const distanceSelect = new mdc.select.MDCSelect(document.querySelector("#distanceDiv"));
+		
+		db favorites.add({id:1, value:"19"});
+		$("#saveChanges").click(function(){
+			var distanceSelect = document.getElementById("distanceSelect");
+			var chooseDistance = distanceSelect.options[distanceSelect.selectedInfo].value;
+			var saveResultUL = document.getElementById("saveResults");
+			var li = document.createElement("li");
+		$(li).addClass("mdc-list-item");
+			db.favorites.update(1,{value:chooseDistance})
+				.then(function(update){
+					if (update)
+						li.appendChild(document.createTextNode("Favorites have been saved."));
+					else
+						li.appendChild(document.createTextNode("Failed to save as favorite."));
+				});
+				
+		saveResultUL.appendChild(li);
+			zoomValue = parseInt(clickedValue);
+			initMap();
+		});
+		
+		var map;
+	   	var zoomValue = 16;
+			
+        
+		var pinDrop = {lat: 41.872051, lng: -87.647735};
+	   	var corr = false;
+		
+		$("#aroundMeNav").click(function(){
+	   		if ("geolocation" in navigator) {	
+				    navigator.geolocation.getLocation(function(position) {
+				  	pinDrop.lat = position.coords.latitude;
+				  	pinDrop.lng = position.coords.longitude;
+				  	corr = true;
+				  	initMap();
+				});
+			} 
+			else
+			  alert("geolocation Does not work");
+	   	});
+		    
+		function initMap() {
+	   		var pin = pinDrop;
+	   		map = new google.maps.Map(document.getElementById("map"), {
+	   			center: pin
+	   			zoom: zoomValue,
+	   		});
+	   		if (corr){
+	   			var marker = new google.maps.Marker({
+	   				position: pinDrop,
+	   				map: map,
+	   				title: "You are Here"
+	   			});
+	   		}
+			
+			for (var i = 0; i < 9; i++){
+    			switch (i){
+    				case 0:
+    					addMarkers("008S");
+    					break;
+    				case 1:
+    					addMarkers("008N");
+    					break;
+    				case 2:
+    					addMarkers("012E");
+    					break;
+    				case 3:
+    					addMarkers("012W");
+    					break;
+    				case 4:
+    					addMarkers("060E");
+    					break;
+    				case 5:
+    					addMarkers("060W");
+    					break;
+    				case 6:
+    					addMarkers("157E");
+    					break;
+    				case 7:
+    					addMarkers("157W");
+    					break;
+					case 8:
+						addMarkers("RED");
+    			}
+    		}
+	   	}
+			
+			function busInfo(v){
+	        var loc = v.lat + "," + v.lon;
+	    	var gMapsURL = "https://www.google.com/maps/?q=";
+	    	gMapsURL += loc;
+			var info = 
+				'<div id="info">'+
+					'<h1 id="firstHeading" class="firstHeading">' + v.stpnm + '</h1>'+
+					'<div id="bodyContent">'+
+						'<p>' + "<strong>Route Number: </strong>" + v.rt + '</p>'+
+						'<p>' + "<strong>Route Direction: </strong>" + v.dir + '</p>'+
+						'<p>' + "<strong>Stop ID: </strong>" + v.stpid + '</p>'+
+						'<p><a href=' + gMapsURL +'>' + 'Open in  Google Maps</a></p>'+
+					'</div>'+
+				'</div>';
+			return info;
+	    }
+	    function addPin(key){
+	    	if (key== "RED"){
+	    		$.each(busStopsArr[key], function(i, v){
+		   			var longitude = v.lon;
+		   			var latitude = v.lat;
+		   			var color = colors[key];
+		   			var info = busInfo(v);
+		   			
+					var spot = new google.maps.Spot({
+						position: {lat: latitude, lng: longitude},
+						map: map,
+						title: name,
+						icon: 
+						{
+					        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+					        scale: 5.5,
+					        fillColor: color,
+					        fillOpacity: 1.0,
+					        strokeWeight: 0.4
+					    }
+					});
+					
+			        var infowindow = new google.maps.InfoWindow({
+			        	content: info
+			        });
+			        marker.addListener('click', function() {
+			        	infowindow.open(map, marker);
+			        });
+				});
+	   		}
+	   	}
+	   	/***********************************************************************
+	   	  <div id="list"></div>
+        
+        <script>
+          $("#btn1").on("click", function(){
+            console.log("hello");
+              alert($(this).attr('href'));
+              //window.open();
+    
+          });
+          
+            
+          $("#myBtn").on("click", function(){
+              geoFindMe();
+              $("#searchScreen").hide();
+              $("#map").show();
+              $("#list").show();
+    
+          });
+      **********************************************************/
+   		   	if ('serviceWorker' in navigator){
+	   		window.addEventListener('load', function(){
+	   			navigator.serviceWorker.register('./sw.js').then(function(registration){
+	   				console.log('ServiceWorker registration successful: ', registration.scope);
+	   			}, function(err){
+	   				console.log('ServiceWorker registration error: ', err);
+	   			});
+	   		});
+	   	}
+    </script>
+    <script async defer
+    	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdGo2V2_-pPvFrkhud_hrTq7aHOI3VX98&callback=initMap">
+    </script>
+</body>
+</html>
