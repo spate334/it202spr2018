@@ -1,20 +1,267 @@
 <!DOCTYPE html>
 <html>
-
-
-<head>
-    <title>Restaurant Finder</title>
-    <style>
-        body {
-            background-color: gray;
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>UIC Bus Tracker</title>
+        <link href="https://unpkg.com/material-components-web@0.34.1/dist/material-components-web.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="manifest" href="./manifest.json">
+        <link rel="shortcut icon" type="image/x-icon" href="./imgs/favicon.ico"/>
+        <scriptsrc="https://code.jquery.com/jquery-3.3.1.min.js"
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+		crossorigin="anonymous">></script>
+		<script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+		
+        
+        <style>
+            body, html {
+                margin: 0px;
+                height: 100%;
+                overflow: hidden;
+                min-height: 500px;
+            }
+            #map {
+	   		margin: 20px;
+	   		padding: 20px;
+        	height: 850px;
         }
-    </style>
-
+        .container {
+			text-align: center;
+			margin: auto;
+			width: 66.6%;
+			height: 66.6%;
+		}
+		#TabBar {
+			padding-top: 30px;
+			padding-bottom: 40px;
+		}
+		#logoImg {
+			width: 100%;
+		}
+		#h1 {
+  			background-color: #800080;
+  		}
+  		.submitBtn {
+			font-size: 30px;
+		}
+		#h1 .mdc-toolbar__section {
+			overflow: visible;
+		}
+		.mdc-radio {
+			padding: 30px;
+		}
+		.mdc-tab {
+			font-size: 25px;
+			padding: 15px 50px;
+		}
+		.mdc-select {
+			margin: 30px;
+			width: 30%;
+		}
+		.mdc-button {
+			margin: 20px;
+		}
+	</style>
+	
 </head>
 
-<body>
-
-
-</body>
-
-</html>
+<body class="mdc-typography">
+    <main>
+            <div class="mdc-toolbar">
+                <div class="mdc-toolbar__row mdc-toolbar__row--custom-height">
+                    <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
+                        <i class="material-icons mdc-toolbar__menu-icon" id="toolbarBackArrow">Directions_Bus</i>
+                        <span class="mdc-toolbar__title" id="toolbarTitle">UIC Bus Tracker</span>
+                    </section>
+                    <section class="mdc-toolbar__section mdc-toolbar__section--shrink-to-fit mdc-toolbar__section--align-end">
+                        <button id="arrivalsNav" class="mdc-toolbar__menu-icon mdc-fab material-icons" aria-label="Location" data-mdc-auto-init="MDCRipple">
+                            <span class="mdc-fab__icon">Estimated Arrivals</span>
+                        </button>
+                        <button id="btnNearme" class="mdc-toolbar__menu-icon mdc-fab material-icons" aria-label="Settings" data-mdc-auto-init="MDCRipple">
+                            <span class="mdc-fab__icon">Near Me</span>
+                        <button id="btnSettings" class="mdc-toolbar__menu-icon mdc-fab material-icons" aria-label="Settings" data-mdc-auto-init="MDCRipple">
+                            <span class="mdc-fab__icon">settings</span>
+                        </button>
+                    </section>
+                </div>
+            </div>
+            
+    //Firstscreen
+	<div id="arrivals">
+		<br><br><br>
+		//racine image
+		<img id="logoImg" src="imgs/racine.jpg">
+		<div class="container">
+			<div id="TabBar">
+				<nav id="basic-tab-bar" class="mdc-tab-bar">
+					<a id="busNav" class="mdc-tab mdc-tab--active" href="#">Bus</a>
+					<span class="mdc-tab-bar__indicator"></span>
+				</nav>
+			</div>
+			<div id="busTab"
+				<div id="busRoute" class="mdc-select">
+					<select id="busRouteSelect" class="mdc-select__native-control">
+						<option id="disabledOption" value="" disabled selected></option>
+						<option value="8">8 - Halsted</option>
+						<option value="12">12 - Roosevelt</option>
+						<option value="60">60 - Blue Island/26th</option>
+						<option value="157">157 - Streeterville/Taylor</option>
+					</select>
+					<div class="mdc-select__label">Choose A Route</div>
+					<div class="mdc-select__bottom-line"></div>
+				</div>
+				<br>
+				
+					<div id="busStop" class="mdc-select">
+					<select id="busStopSelect" class="mdc-select__native-control">
+						<option value="" disabled selected></option>
+						<option  id="none" class="hide" value="none">Placeholder</option>
+					</select>
+					<div class="mdc-select__label">Select A Stop</div>
+					<div class="mdc-select__bottom-line"></div>
+				</div>
+				<br><br>
+				<button id="busSubmitBtn" class="mdc-button submitBtn" disabled><strong>TRACK</strong></button>
+				<div class="results">
+					<ul id="busResults" class="mdc-list">
+						<li class="mdc-list-item hide">Single-line item</li>
+					</ul>
+				<br>
+				<div id="busDirection" class="mdc-select">
+					<select id="busDirectionSelect" class="mdc-select__native-control">
+						<option value="" disabled selected></option>
+					</select>
+					<div class="mdc-select__label">Select A Direction</div>
+					<div class="mdc-select__bottom-line"></div>
+				</div>
+			</div>
+		</div>
+		//second screen
+		<div id="nearMe" class="hide">
+		<br><br><br>
+		<div id="map"></div>
+	</div>
+</div>
+</div>
+	//third screen
+	
+	$(document).ready(function(){
+	   		console.log("Document Ready");
+	   	});
+	   	
+	   	var 8South = [
+			{rt: "8", dir: "Southbound", stpid: "5804", stpnm: "Halsted & 14th Place", lat: 41.862389936575, lon: -87.646812200546},
+			{rt: "8", dir: "Southbound", stpid: "4638", stpnm: "Halsted & Harrison", lat: 41.873831019714, lon: -87.647214531898},
+			{rt: "8", dir: "Southbound", stpid: "5799", stpnm: "Halsted & Jackson", lat: 41.878029032111, lon: -87.647313236666},
+			{rt: "8", dir: "Southbound", stpid: "15008", stpnm: "Halsted & Madison", lat: 41.881503067986, lon: -87.647415161918},
+			{rt: "8", dir: "Southbound", stpid: "5802", stpnm: "Halsted & Maxwell", lat: 41.864866881017, lon: -87.646881937981},
+			{rt: "8", dir: "Southbound", stpid: "15352", stpnm: "Halsted & Monroe", lat: 41.88025454567, lon: -87.647378468173},
+			{rt: "8", dir: "Southbound", stpid: "4639", stpnm: "Halsted & Polk", lat: 41.871937629893, lon: -87.647150158882},
+			{rt: "8", dir: "Southbound", stpid: "17366", stpnm: "Halsted & Roosevelt", lat: 41.867215894509, lon: -87.646951675415},
+			{rt: "8", dir: "Southbound", stpid: "4640", stpnm: "Halsted & Taylor", lat: 41.869896380997, lon: -87.647096514702},
+			{rt: "8", dir: "Southbound", stpid: "205", stpnm: "UIC-Halsted Blue Line Station", lat: 41.875513453518, lon: -87.647277832293}
+		];
+		var 8North = [
+			{rt: "8", dir: "Northbound", stpid: "5926", stpnm: "Halsted & 14th Place", lat: 41.862198169133, lon: -87.64672100544},
+			{rt: "8", dir: "Northbound", stpid: "18009", stpnm: "Halsted & Jackson", lat: 41.878208885061, lon: -87.647189001581},
+			{rt: "8", dir: "Northbound", stpid: "440", stpnm: "Halsted & Madison", lat: 41.882007103365, lon: -87.647316455841},
+			{rt: "8", dir: "Northbound", stpid: "5928", stpnm: "Halsted & Maxwell", lat: 41.864655145968, lon: -87.646796107292},
+			{rt: "8", dir: "Northbound", stpid: "5931", stpnm: "Halsted & Monroe", lat: 41.880271320896, lon: -87.647260665108},
+			{rt: "8", dir: "Northbound", stpid: "4618", stpnm: "Halsted & Polk", lat: 41.871777847595, lon: -87.646887302399},
+			{rt: "8", dir: "Northbound", stpid: "14777", stpnm: "Halsted & Roosevelt", lat: 41.867631357301, lon: -87.646871209145},
+			{rt: "8", dir: "Northbound", stpid: "14487", stpnm: "Halsted & Taylor", lat: 41.869756567043, lon: -87.646833658218},
+			{rt: "8", dir: "Northbound", stpid: "18184", stpnm: "UIC-Halsted Blue Line Station", lat: 41.875578047547, lon: -87.647168084553}
+			];
+			
+		var 12East = [
+			{rt: "12", dir: "Eastbound", stpid: "313", stpnm: "327 W Roosevelt", lat: 41.867199915117, lon: -87.635573744774},
+			{rt: "12", dir: "Eastbound", stpid: "307", stpnm: "900 W Roosevelt", lat: 41.867020146681, lon: -87.649419307709},
+			{rt: "12", dir: "Eastbound", stpid: "305", stpnm: "Roosevelt & Blue Island", lat: 41.86695223403, lon: -87.653641104698},
+			{rt: "12", dir: "Eastbound", stpid: "312", stpnm: "Roosevelt & Canal", lat: 41.867151976917, lon: -87.638840675354},
+			{rt: "12", dir: "Eastbound", stpid: "14459", stpnm: "Roosevelt & Halsted", lat: 41.867064090124, lon: -87.646324038506},
+			{rt: "12", dir: "Eastbound", stpid: "310", stpnm: "Roosevelt & Jefferson", lat: 41.867120018097, lon: -87.642295360565},
+			{rt: "12", dir: "Eastbound", stpid: "17003", stpnm: "Roosevelt & May", lat: 41.866924269976, lon: -87.65537917614},
+			{rt: "12", dir: "Eastbound", stpid: "306", stpnm: "Roosevelt & Morgan", lat: 41.866996177518, lon: -87.651221752167}
+		];
+		var 12West = [
+			{rt: "12", dir: "Westbound", stpid: "326", stpnm: "327 W Roosevelt", lat: 41.867393265591, lon: -87.635536193848},
+			{rt: "12", dir: "Westbound", stpid: "332", stpnm: "900 W Roosevelt", lat: 41.867211899662, lon: -87.649462223053},
+			{rt: "12", dir: "Westbound", stpid: "334", stpnm: "Roosevelt & Blue Island", lat: 41.867151976917, lon: -87.653083205223},
+			{rt: "12", dir: "Westbound", stpid: "327", stpnm: "Roosevelt & Canal", lat: 41.867339734662, lon: -87.639044523239},
+			{rt: "12", dir: "Westbound", stpid: "17396", stpnm: "Roosevelt & Halsted", lat: 41.867262250879, lon: -87.647493333335},
+			{rt: "12", dir: "Westbound", stpid: "18174", stpnm: "Roosevelt & Jefferson", lat: 41.867300218619, lon: -87.642539020541},
+			{rt: "12", dir: "Westbound", stpid: "335", stpnm: "Roosevelt & May", lat: 41.86711202839, lon: -87.655030488968},
+			{rt: "12", dir: "Westbound", stpid: "333", stpnm: "Roosevelt & Morgan", lat: 41.867183935721, lon: -87.650862336159}
+		];
+		
+		var 60East = [
+			{rt: "60", dir: "Eastbound", stpid: "6342", stpnm: "Racine & 13th Street", lat: 41.865110575204, lon: -87.65657544136},
+			{rt: "60", dir: "Eastbound", stpid: "6341", stpnm: "Racine & 14th Street", lat: 41.863680356701, lon: -87.656543254852},
+			{rt: "60", dir: "Eastbound", stpid: "6346", stpnm: "Racine & Harrison", lat: 41.874074679731, lon: -87.656720280647},
+			{rt: "60", dir: "Eastbound", stpid: "15993", stpnm: "Racine & Lexington", lat: 41.871689967161, lon: -87.656725645065},
+			{rt: "60", dir: "Eastbound", stpid: "15404", stpnm: "Racine & Roosevelt", lat: 41.867255842972, lon: -87.656655907631},
+			{rt: "60", dir: "Eastbound", stpid: "6344", stpnm: "Racine & Taylor", lat: 41.869293181468, lon: -87.656731009483}
+		];
+		var 60West = [
+			{rt: "60", dir: "Westbound", stpid: "6370", stpnm: "Racine & 13th Street", lat: 41.865350273499, lon: -87.656666636467},
+			{rt: "60", dir: "Westbound", stpid: "6371", stpnm: "Racine & 14th Street", lat: 41.863560504536, lon: -87.656623721123},
+			{rt: "60", dir: "Westbound", stpid: "15402", stpnm: "Racine & Cabrini", lat: 41.871206622614, lon: -87.656854391098},
+			{rt: "60", dir: "Westbound", stpid: "6366", stpnm: "Racine & Harrison", lat: 41.87403473553, lon: -87.656972408295},
+			{rt: "60", dir: "Westbound", stpid: "15401", stpnm: "Racine & Lexington", lat: 41.872400996298, lon: -87.656972408295},
+			{rt: "60", dir: "Westbound", stpid: "15403", stpnm: "Racine & Roosevelt", lat: 41.866776459772, lon: -87.656720280647},
+			{rt: "60", dir: "Westbound", stpid: "15292", stpnm: "Racine & Taylor", lat: 41.869496911747, lon: -87.65682220459}
+		];
+		
+		var 157East = [
+			{rt: "157", dir: "Eastbound", stpid: "6700", stpnm: "900 W Taylor", lat: 41.869468948806, lon: -87.648759484291},
+			{rt: "157", dir: "Eastbound", stpid: "6705", stpnm: "Canal & Taylor", lat: 41.869992253245, lon: -87.63925909996},
+			{rt: "157", dir: "Eastbound", stpid: "6698", stpnm: "Taylor & Aberdeen", lat: 41.869436991144, lon: -87.654402852058},
+			{rt: "157", dir: "Eastbound", stpid: "6701", stpnm: "Taylor & Halsted", lat: 41.869484927631, lon: -87.647375464439},
+			{rt: "157", dir: "Eastbound", stpid: "6703", stpnm: "Taylor & Jefferson", lat: 41.869688657298, lon: -87.642402648926},
+			{rt: "157", dir: "Eastbound", stpid: "6694", stpnm: "Taylor & Laflin", lat: 41.869265218438, lon: -87.664278745651},
+			{rt: "157", dir: "Eastbound", stpid: "6695", stpnm: "Taylor & Loomis", lat: 41.869313155054, lon: -87.661719918251},
+			{rt: "157", dir: "Eastbound", stpid: "6699", stpnm: "Taylor & Morgan", lat: 41.869480932925, lon: -87.651345133781},
+			{rt: "157", dir: "Eastbound", stpid: "6697", stpnm: "Taylor & Racine", lat: 41.869389054621, lon: -87.656854391098},
+			{rt: "157", dir: "Eastbound", stpid: "6696", stpnm: "Taylor & Throop", lat: 41.86935709692, lon: -87.659289836884}
+		];
+		var 157West = [
+			{rt: "157", dir: "Westbound", stpid: "6627", stpnm: "900 W Taylor", lat: 41.869664689136, lon: -87.648534178734},
+			{rt: "157", dir: "Westbound", stpid: "6623", stpnm: "Clinton & Taylor", lat: 41.869780535171, lon: -87.640820145607},
+			{rt: "157", dir: "Westbound", stpid: "6629", stpnm: "Taylor & Aberdeen", lat: 41.869504901156, lon: -87.65401661396},
+			{rt: "157", dir: "Westbound", stpid: "17277", stpnm: "Taylor & Halsted", lat: 41.869696646684, lon: -87.647370100021},
+			{rt: "157", dir: "Westbound", stpid: "17275", stpnm: "Taylor & Jefferson", lat: 41.869748577665, lon: -87.642627954483},
+			{rt: "157", dir: "Westbound", stpid: "6633", stpnm: "Taylor & Laflin", lat: 41.869333128633, lon: -87.663999795914},
+			{rt: "157", dir: "Westbound", stpid: "6632", stpnm: "Taylor & Loomis", lat: 41.869373075773, lon: -87.661403417587},
+			{rt: "157", dir: "Westbound", stpid: "6628", stpnm: "Taylor & Morgan", lat: 41.869536858784, lon: -87.651361227036},
+			{rt: "157", dir: "Westbound", stpid: "15811", stpnm: "Taylor & Racine", lat: 41.869448975269, lon: -87.65684902668},
+			{rt: "157", dir: "Westbound", stpid: "6631", stpnm: "Taylor & Throop", lat: 41.869417017597, lon: -87.659069895744}
+		];
+		
+		var stopsARR = {};
+		stopsARR["008S"] = 8South;
+		stopsARR["008N"] = 8North;
+		stopsARR["012E"] = 12East;
+		stopsARR["012W"] = 12West;
+		stopsARR["060E"] = 60East;
+		stopsARR["060W"] = 60West;
+		stopsARR["157E"] = 157East;
+		stopsARR["157W"] = 157West;
+		
+		
+		function findStop(stopName, direction){
+			var stop;
+			if{
+				Object.keys(stopsARR).forEach(function(key){
+					$.each(stopsARR[key], function(i, v1){
+						if (v.stpnm === stopName && v1.dir === direction)
+							stop = v1;
+					});
+				});
+			}
+			return stop;
+		}
+			varCurrent = "4/22/2018 7:00:00";
+			var busTime = "http://ctabustracker.com/bustime/api/v2/gettime&key=7hV55iRDcTmvtMmgg2y9g5JWS&format=json";
+			
