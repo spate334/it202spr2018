@@ -1,5 +1,5 @@
 var dataCacheName = 'busTracker';
-var cacheName = 'uicBusTracker';
+var cacheName = 'UICBusTracker';
 var filesToCache = [
   '.',
   'index.html',
@@ -40,10 +40,17 @@ elf.addEventListener('activate', function(e) {
 });
 
 self.addEventListener('fetch', function(e) {
-  console.log('[ServiceWorker] Fetch', e.request.url);
-  e.respondWith(
-    caches.match(e.request).then(function(response) {
-      return response || fetch(e.request);
-    })
-  );
+ 	if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
+		return;
+	}
+	event.respondWith(
+		caches.match(event.request)
+			.then(function(response) {
+				// Cache hit - return response
+				if (response) {
+					return response;
+				}
+				return fetch(event.request);
+			})
+	);
 });
