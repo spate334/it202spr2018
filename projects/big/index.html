@@ -168,7 +168,7 @@
 		<br><br><br>
 		<div id="map"></div>
 </div>
-	<script type="text/javascript" src="">
+	<script type="text/javascript"
 	$(document).ready(function(){
 	   		console.log("Document Ready");
 	   	});
@@ -520,7 +520,7 @@
 		});
 		const distanceSelect = new mdc.select.MDCSelect(document.querySelector("#distanceDiv"));
 		
-		db favorites.add({id:1, value:"19"});
+		db.favorites.add({id:1, value:"19"});
 		$("#saveChanges").click(function(){
 			var distanceSelect = document.getElementById("distanceSelect");
 			var chooseDistance = distanceSelect.options[distanceSelect.selectedInfo].value;
@@ -563,8 +563,8 @@
 		function initMap() {
 	   		var pin = pinDrop;
 	   		map = new google.maps.Map(document.getElementById("map"), {
-	   			center: pin
-	   			zoom: zoomValue,
+	   			center: pin,
+	   			zoom: zoomValue
 	   		});
 	   		if (corr){
 	   			var marker = new google.maps.Marker({
@@ -652,26 +652,7 @@
 				});
 	   		}
 	   	}
-	   	/***********************************************************************
-	   	  <div id="list"></div>
-        
-        <script>
-          $("#btn1").on("click", function(){
-            console.log("hello");
-              alert($(this).attr('href'));
-              //window.open();
-    
-          });
-          
-            
-          $("#myBtn").on("click", function(){
-              geoFindMe();
-              $("#searchScreen").hide();
-              $("#map").show();
-              $("#list").show();
-    
-          });
-      **********************************************************/
+	   
    		   	if ('serviceWorker' in navigator){
 	   		window.addEventListener('load', function(){
 	   			navigator.serviceWorker.register('./sw.js').then(function(registration){
@@ -682,7 +663,8 @@
 	   		});
 	   	}
     </script>
-    <script async defer
+    
+    </script async defer
     	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdGo2V2_-pPvFrkhud_hrTq7aHOI3VX98&callback=initMap">
     </script>
 </body>
