@@ -1,122 +1,95 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Media</title>
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <style>
-           #templateFace,
-          #canvas {
-            display: none;
-          }
-        </style>
-
+        <title>Projecct 5</title>
     </head>
     <body>
+        <script
+          src="https://code.jquery.com/jquery-3.3.1.min.js"
+          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+          crossorigin="anonymous"></script>
+        
         <video id="player" controls autoplay></video>
         <button id="capture">Capture</button>
-        <div id="templateFace">
-        <canvas style="display: inline-block"></canvas>
-        <p style="display: inline-block"></p>
-        </div>
         <canvas id="canvas" width=320 height=240></canvas>
-        <div id="imageData"></div>
-        
+        <div id="imageData" ></div>
 
-        
         <script>
-          var currentId = 0;
           const player = document.getElementById('player');
-          const frameCanvas = document.getElementById('frameCanvas');
-          const collageCanvas = document.getElementById('collageCanvas');
           const canvas = document.getElementById('canvas');
           const context = canvas.getContext('2d');
           const captureButton = document.getElementById('capture');
-          var requestBody = "";
-          
-          //collageCanvas.width = window.innerWidth;
-          //collageCanvas.height = 300;
+          var doFaceCapture = false;
+          var visionApiEndpoint = "https://vision.googleapis.com/v1/images:annotate?key=";
+          var nextX = 0, nextY = 0;
           
           const constraints = {
             video: true,
           };
-           captureButton.addEventListener('click', () => {
+         captureButton.addEventListener('click', () => {
+           
+            doFaceCapture = true;
             context.drawImage(player, 0, 0, canvas.width, canvas.height);
-            getImageData();
+            getImageData('FACE_DETECTION');
           });
-
-          
-          // Attach the video stream to the video element and autoplay.
+        
+        
           navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) => {
               player.srcObject = stream;
             });
-            
-            
-            
-          function getImageData(type) {
-             // capture the video frame to the hidden canvas
-             
-             // create the request body
-            requestBody = {
-                  "requests":[
-                    {
-                      "image":{
-                        "content": canvas.toDataURL().split(",")[1]
-                      },
-                      "features":[
+         function getImageData(type) {  
+         requestBody = {
+                    "requests":[
                         {
-                          "type":"FACE_DETECTION"
-                        },
-                        {
-                          "type":"LABEL_DETECTION",
-                          "maxResults":10
+                          "image":{
+                            "content": canvas.toDataURL().split(",")[1]
+                          },
+                          "features":[
+                            {
+                              "type": type,
+                              "maxResults": 1
+                            }
+                          ]
                         }
                       ]
+                };
+        $.ajax({
+            method: "POST",
+            contentType: "application/json",
+            url: visionApiEndpoint+"?key=AIzaSyBijMwI7Leeu_i7MBF0hmpycUOZ2CG4jJU",
+            data: JSON.stringify(requestBody)
+        })
+        .done(function(response){
+                    console.log(response);
+                    $("#image").html("<pre>" + JSON.stringify(response) + "</pre>")
+                   
+                    var faceVertices = response.responses[0].faceAnnotations[0].boundingPoly.vertices;
+                    console.log(faceVertices);
+                          
+                    
+                    var topLeft = faceVertices[0];
+                    var bottomRight = faceVertices[2];
+                    console.log(bottomRight, bottomRight.x, topLeft, topLeft.x);
+                    
+                    
+                    var faceWidth = bottomRight.x - topLeft.x;
+                    var faceHeight = bottomRight.y - topLeft.y;
+                    var sourceX = topLeft.x;
+                    var sourceY = topLeft.y;
+                    
+                    context.drawImage(canvas, sourceX, sourceY, faceWidth, faceHeight, nextX, nextY, faceWidth, faceHeight);
+                    
+                    nextX += faceWidth;
+                  
+                    if (doFaceCapture) {
+                      getImageData('FACE_DETECTION');
                     }
-                  ]
-                }
-            
-            // send the data to Google Cloud Vision
-            $.ajax({
-                method: "POST",
-                contentType: "application/json",
-                url: "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBijMwI7Leeu_i7MBF0hmpycUOZ2CG4jJU",
-                data: JSON.stringify(requestBody)
-              })
-                .done(function(response) {
-                  if (f[0].faceAnnotations != undefined && f[0].faceAnnotations.length > 0) {
-                      var face = $("#templateFace").clone().attr("id", "face" + currentId);
-                      face.find("canvas").attr("width", width).attr("height", height);
-                      const canvas2 = face.find("canvas").get(0);
-                      currentId += 1;
-                      
-                      var vertices = f[0].faceAnnotations[0].boundingPoly.vertices; 
-                      var startX = vertices[0].x;
-                      var startY = vertices[0].y;
-                      var width = vertices[2].x - vertices[0].x;
-                      var height = vertices[2].y - vertices[0].y;
-                      
-
-                  // check to see whether we need to start a new row or column
-                   var labels = "";
-                      if (f[0].labelAnnotations != undefined) {
-                        $.each(f[0].labelAnnotations, function(j, l) {
-                          labels += l.description + ":" + l.score + "<br>";
-                        });
-                      } else {
-                        labels = "No labels";
-                      }
-                      face.find("p").html(labels);
-                      
-                      // add to imageData
-                     const context2 = canvas2.getContext('2d');
-                     context2.drawImage(canvas, startX, startY, width, height, 0, 0, canvas2.width, canvas2.height);
-                    } else {
-                      $("#imageData").prepend("<p>No Face Detected</p>")
-                    }
-                  });
-          }};
-          }
+                    
+                });
+            }
+        </script>
+        <script> 
         </script>
     </body>
 </html>
