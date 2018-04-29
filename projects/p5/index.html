@@ -25,6 +25,7 @@
           var doFaceCapture = false;
           var visionApiEndpoint = "https://vision.googleapis.com/v1/images:annotate?key=";
           var nextX = 0, nextY = 0;
+          var requestBody;
           
           const constraints = {
             video: true,
@@ -87,6 +88,9 @@
                   
                     if (doFaceCapture) {
                       getImageData('FACE_DETECTION');
+                    }
+                    else{
+                      $("#imageData").prepend("<p>No Face Detected</p>")
                     }
                     
                 });
