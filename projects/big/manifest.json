@@ -1,16 +1,17 @@
 {
   "name": "Sagar Patel",
-  "short_name": "Sagar",
-  "start_url": "https://spate334.github.io/it202spr2018/projects/big/",
+  "short_name": "UICBusTracker",
   "display": "standalone",
   "background_color": "#f8f8f8",
   "description": "UIC Bus Tracker",
   "icons": [{
-    "src": "uic.png",
+    "src": "./imgs/uic.png",
     "type": "image/png"
   },
   {
     "src": "./imgs/favicon.ico",
     "type": "image/x-icon"
-  }]
+  }
+  ],
+   "start_url": "https://spate334.github.io/it202spr2018/projects/big/"
 }
