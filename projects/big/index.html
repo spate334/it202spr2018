@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
+       <meta charset="utf-8">
+       <meta name="description" content="UIC Bus Tracker">
+	   <meta name="keywords" content="CTA,UIC,Bus,Transit,Authority,Tracker">
+	   <meta name="author" content="Sagar Patel">
         <title>UIC Bus Tracker</title>
         <link href="https://unpkg.com/material-components-web@0.34.1/dist/material-components-web.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -15,7 +17,7 @@
 		<script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
 		
         
-        <style>
+        <style type="text/css">
             body, html {
                 margin: 0px;
                 height: 100%;
@@ -33,6 +35,9 @@
 			width: 66.6%;
 			height: 66.6%;
 		}
+		.hide{
+			display:none;
+		}
 		#TabBar {
 			padding-top: 30px;
 			padding-bottom: 40px;
@@ -40,13 +45,13 @@
 		#logoImg {
 			width: 100%;
 		}
-		#h1 {
+		#shrine-header {
   			background-color: #800080;
   		}
   		.submitBtn {
 			font-size: 30px;
 		}
-		#h1 .mdc-toolbar__section {
+		#shrine-header .mdc-toolbar__section {
 			overflow: visible;
 		}
 		.mdc-radio {
@@ -68,30 +73,47 @@
 </head>
 
 <body class="mdc-typography">
-    <main>
-            <div class="mdc-toolbar">
-                <div class="mdc-toolbar__row mdc-toolbar__row--custom-height">
-                    <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
-                        <i class="material-icons mdc-toolbar__menu-icon" id="toolbarBackArrow">Directions_Bus</i>
-                        <span class="mdc-toolbar__title" id="toolbarTitle">UIC Bus Tracker</span>
-                    </section>
-                    <section class="mdc-toolbar__section mdc-toolbar__section--shrink-to-fit mdc-toolbar__section--align-end">
-                        <button id="arrivalsNav" class="mdc-toolbar__menu-icon mdc-fab material-icons" aria-label="Location" data-mdc-auto-init="MDCRipple">
-                            <span class="mdc-fab__icon">Estimated Arrivals</span>
-                        </button>
-                        <button id="btnDistance" class="mdc-toolbar__menu-icon mdc-fab material-icons" aria-label="Distance" data-mdc-auto-init="MDCRipple">
-                            <span class="mdc-fab__icon">Distance</span>
-                        <button id="btnAroundme" class="mdc-toolbar__menu-icon mdc-fab material-icons" aria-label="Aroundme" data-mdc-auto-init="MDCRipple">
-                            <span class="mdc-fab__icon">Around Me</span>
-                        </button>
-                    </section>
-                </div>
-            </div>
+	<header id="shrine-header" class="mdc-toolbar mdc-toolbar--fixed mdc-theme--text-primary-on-background">
+		<div class="mdc-toolbar__row">
+	    	<section class="mdc-toolbar__section mdc-toolbar__section--align-start">
+				<a id="shrine-nav-icon" class="material-icons mdc-ripple-surface"
+				   href="#"
+				   aria-label="Click to show the navigation menu"
+				   aria-controls="shrine-nav-menu"
+				   data-mdc-auto-init="MDCRipple"
+				   data-mdc-ripple-is-unbounded>menu
+				</a>
+		    </section>
+	  	</div>
+	</header>
+	<aside class="mdc-drawer mdc-drawer--temporary mdc-typography">
+		<nav class="mdc-drawer__drawer">
+	    	<header class="mdc-drawer__header">
+	      		<div class="mdc-drawer__header-content">
+	      			<i class="material-icons mdc-list-item__graphic" aria-hidden="true">directions_bus</i>
+	      			<i class="material-icons mdc-list-item__graphic" aria-hidden="true">train</i>
+	      			<strong>UIC Bus Tracker</strong>
+	      		</div>	
+	    	</header>
+	    	<nav id="icon-with-text-demo" class="mdc-drawer__content mdc-list">
+	      		<a id="arrivalsNav" class="mdc-list-item mdc-list-item--activated" href="#">
+	       			<i class="material-icons mdc-list-item__graphic" aria-hidden="true">alarm</i>Estimated Arrivals
+	      		</a>
+	      		<a id="distanceNav" class="mdc-list-item" href="#">
+	        		<i class="material-icons mdc-list-item__graphic" aria-hidden="true">Distance</i>Distance
+	      			      		</a>
+	      			<a id="aroundMeNav" class="mdc-list-item" href="#">
+	       			<i class="material-icons mdc-list-item__graphic" aria-hidden="true">person_pin_circle</i>Around Me
+	      		</a>
+	    	</nav>
+	  	</nav>
+	</aside>
+
             
 
 	<div id="arrivals">
 		<br><br><br>
-		<img id="logoImg" src="imgs/uic.jpg">
+		<img id="logoImg" src="imgs/uic.png">
 		<div class="container">
 			<div id="TabBar">
 				<nav id="basic-tab-bar" class="mdc-tab-bar">
@@ -112,7 +134,14 @@
 					<div class="mdc-select__bottom-line"></div>
 				</div>
 				<br>
-				
+				<div id="busDirection" class="mdc-select">
+					<select id="busDirectionChoose" class="mdc-select__native-control">
+						<option value="" disabled selected></option>
+					</select>
+					<div class="mdc-select__label">Select A Direction</div>
+					<div class="mdc-select__bottom-line"></div>
+				</div>
+				<br>
 					<div id="busStop" class="mdc-select">
 					<select id="busStopSelect" class="mdc-select__native-control">
 						<option value="" disabled selected></option>
@@ -127,16 +156,8 @@
 					<ul id="busResults" class="mdc-list">
 						<li class="mdc-list-item hide">Single-line item</li>
 					</ul>
-				<br>
-				<div id="busDirection" class="mdc-select">
-					<select id="busDirectionSelect" class="mdc-select__native-control">
-						<option value="" disabled selected></option>
-					</select>
-					<div class="mdc-select__label">Select A Direction</div>
-					<div class="mdc-select__bottom-line"></div>
-				</div>
-			</div>
 		</div>
+    </div>
   </div>
   
 		<div id="distanceScreen" class="hide">
@@ -168,8 +189,16 @@
 		<br><br><br>
 		<div id="map"></div>
 </div>
-	<script type="text/javascript"
-	$(document).ready(function(){
+<script src="https://unpkg.com/material-components-web@0.34.1/dist/material-components-web.js"></script>
+<script
+		src="https://code.jquery.com/jquery-3.3.1.min.js"
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+		crossorigin="anonymous">
+	</script>
+	<script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+	<script type="text/javascript">
+	
+		$(document).ready(function(){
 	   		console.log("Document Ready");
 	   	});
 	   	var proxy = "https://polar-garden-75406.herokuapp.com/apiPassThru.php?apiEndpoint=";
@@ -265,29 +294,29 @@
 			{rt: "157", dir: "Westbound", stpid: "6631", stpnm: "Taylor & Throop", lat: 41.869417017597, lon: -87.659069895744}
 		];
 		
-		var stopsARR = {};
-		stopsARR["008S"] = eightSouth;
-		stopsARR["008N"] = eightNorth;
-		stopsARR["012E"] = tweleveEast;
-		stopsARR["012W"] = twelveWest;
-		stopsARR["060E"] = sixtyEast;
-		stopsARR["060W"] = sixtyWest;
-		stopsARR["157E"] = oneFiftySevenEast;
-		stopsARR["157W"] = oneFiftySevenWest;
+		var stopArr = {};
+		stopArr["008S"] = eightSouth;
+		stopArr["008N"] = eightNorth;
+		stopArr["012E"] = tweleveEast;
+		stopArr["012W"] = twelveWest;
+		stopArr["060E"] = sixtyEast;
+		stopArr["060W"] = sixtyWest;
+		stopArr["157E"] = oneFiftySevenEast;
+		stopArr["157W"] = oneFiftySevenWest;
 		
 		
 		function findStop(stopName, direction){
 			var stop;
 			if (direction == "008S"){
-				$.each(eightSounth, function(i, v){
+				$.each(eightSouth, function(i, v){
 					if (v.stpnm === stopName)
 						stop = v;
 				});
 			}
 			
 			else{ 
-			Object.keys(stopsARR).forEach(function(key){
-					$.each(stopsARR[key], function(i, v){
+			Object.keys(stopArr).forEach(function(key){
+					$.each(stopArr[key], function(i, v){
 					   if (v.stpnm === stopName && v.dir === direction)
 							stop = v;
 					});
@@ -295,10 +324,7 @@
 			}
 			return stop;
 		}
-		navListener("#arrivalsNav", "#arrivalsScreen", "#aroundMeNav", "#aroundMeScreen", "#distanceNav", "#distanceScreen");
-		navListener("#aroundMeNav", "#distanceScreen", "#arrivalsNav", "#arrivalsScreen", "#distanceNav", "#distanceScreen");
-		navListener("#distanceNav", "#aroundMeScreen", "#arrivalsNav", "#arrivalsScreen", "#aroundMeNav", "#aroundMeScreen");
-		
+	
 		function navListener(mainNav, mainScreen, nav2, screen2, nav3, screen3){
 			$(mainNav).click(function(){
 				$(mainNav).addClass("mdc-list-item--activated");
@@ -310,6 +336,7 @@
 				drawer.open = false;
 			});
 		}
+		tabListener("#busNav", "#busTab");
 		
 		colors = {
 			
@@ -321,14 +348,14 @@
     		"060W": "#800080",
     		"157E": "#FFD700",
     		"157W": "#FFD700",
-		}
+		};
 		
 			varCurrent = "4/22/2018 7:00:00";
-			var busTime = "http://ctabustracker.com/bustime/api/v2/gettime&key=7hV55iRDcTmvtMmgg2y9g5JWS&format=json";
+			var busURL = "http://ctabustracker.com/bustime/api/v2/gettime&key=7hV55iRDcTmvtMmgg2y9g5JWS&format=json";
 			//found this code online
 			function getTime(){
 	   		$.ajax({
-		        url: proxy + timeURL,
+		        url: proxy + busURL,
 		        method: 'GET',
 		     }).done(function(response) {
 			    	response = JSON.parse(response);
@@ -340,7 +367,22 @@
 				   		throw err;
 			       });
 	   	}
-	   	tabListener("#busNav", "#busTab");
+	   	navListener("#arrivalsNav", "#arrivalsScreen", "#aroundMeNav", "#aroundMeScreen", "#distanceNav", "#distanceScreen");
+		navListener("#aroundMeNav", "#distanceScreen", "#arrivalsNav", "#arrivalsScreen", "#distanceNav", "#distanceScreen");
+		navListener("#distanceNav", "#aroundMeScreen", "#arrivalsNav", "#arrivalsScreen", "#aroundMeNav", "#aroundMeScreen");
+		
+	   	function millisToMinutesAndSeconds(millis) {
+	   		var mins = Math.floor(millis / 60000);
+	   		var seconds = ((millis % 60000) / 1000).toFixed(0);
+	   		return mins + ":" + (seconds < 10 ? '0' : '') + seconds;
+	   		}
+	   	function insertToString(main_string, ins_string, pos){
+	   		if (typeof(pos) == "undefined") 
+	   			pos = 0;
+	   		if(typeof(ins_string) == "undefined") 
+	   			ins_string = '';
+	   		return main_string.slice(0, pos) + ins_string + main_string.slice(pos);
+	   	}
    		
    		function tabListener(mainNav, mainTab, otherNav, otherTab){
 			$(mainNav).click(function(){
@@ -349,24 +391,17 @@
 		   		$(mainTab).removeClass("hide");
 		   		$(otherTab).addClass("hide");
 		   	});
-		}
-	   	function insertToString(main_string, ins_string, pos){
-	   		if (typeof(pos) == "undefined") 
-	   			pos = 0;
-	   		if(typeof(ins_string) == "undefined") 
-	   			ins_string = '';
-	   		return main_string.slice(0, pos) + ins_string + main_string.slice(pos);
-	   	}
-	   	function millisToMinutesAndSeconds(millis) {
-	   		var mins = Math.floor(millis / 60000);
-	   		var seconds = ((millis % 60000) / 1000).toFixed(0);
-	   		return mins + ":" + (seconds < 10 ? '0' : '') + seconds;
-	   		}
+   		}
+   		// arrival screen
+   		const busStopSelect = new mdc.select.MDCSelect(document.querySelector("#busStop"));
+   		const busDirectionChoose = new mdc.select.MDCSelect(document.querySelector("#busDirection"));
+   		const busRouteSelect = new mdc.select.MDCSelect(document.querySelector("#busRoute"));
+
 	   		
 	   		$("#busDirection").change(function(){
 			document.getElementById("busSubmitBtn").disabled = true;
 			var route = document.getElementById("busRoute").value;
-			var dir = document.getElementById("busDirection").value;
+			var dir = document.getElementById("busDirectionChoose").value;
 			switch (route){
 				case "8":
 					if (dir === "Northbound")
@@ -401,49 +436,33 @@
 		});
 		
 		mdc.ripple.MDCRipple.attachTo(document.querySelector('.mdc-button'));
-   		const busStopSelect = new mdc.select.MDCSelect(document.querySelector("#busStop"));
-		const busRoute = new mdc.select.MDCSelect(document.querySelector("#busRoute"));
-		const busDirection = new mdc.select.MDCSelect(document.querySelector("#busDirection"));
 	   	$("#busRoute").change(function(){
 	   		document.getElementById("busSubmitBtn").disabled = true;
-			var busRouteSelect = document.getElementById("busRoute");
+			var busRouteSelect = document.getElementById("busRouteSelect");
 			var clickedValue = busRouteSelect.options[busRoute.selectedInfo].value;
-			var busDirection = document.getElementById("busDirection");
-			$('#busDirection').children('option:not(:first)').remove();
+			var busDirectionChoose = document.getElementById("busDirectionChoose");
+			$('#busDirectionChoose').children('option:not(:first)').remove();
 			var option1 = document.createElement("option");
 			var option2 = document.createElement("option");
 			if (clickedValue === "8") {
 				option1.text = "Northbound";
 				option1.value = "Northbound";
-				busDirectionSelect.add(option);
+				busDirectionChoose.add(option);
 				option2.text = "Southbound";
 				option2.value = "Southbound";
-				busDirectionSelect.add(option2);
+				busDirectionChoose.add(option2);
 			}
 			else {
 				option1.text = "Eastbound";
 				option1.value = "Eastbound";
-				busDirectionSelect.add(option);
+				busDirectionChoose.add(option);
 				option2.text = "Westbound";
 				option2.value = "Westbound";
-				busDirectionSelect.add(option2);
+				busDirectionChoose.add(option2);
 			}
-			$("#busDirectionSelect").prop("selectedInfo",0);
+			$("#busDirectionChoose").prop("selectedInfo",0);
 			$('#busStopSelect').children('option:not(:first)').remove();
-		
-		
-		$("#busSubmitBtn").click(function(){
-			var busDisplayUL = document.getElementById("busResults");
-			var li = document.createElement("li");
-    		$(li).addClass("mdc-list-item");
-    		$(li).css("background-color", "#E2E2E2");
-    		li.appendChild(document.createTextNode("Loading..."));
-    		busDisplayUL.appendChild(li);
-       	var transit = "http://ctabustracker.com/bustime/api/v2/getpredictions&key=7hV55iRDcTmvtMmgg2y9g5JWS=";
-		var end = route + "&stpid=" + clkdStp.stpid + "&format=json";
-		transit += end;
-		var url = proxy + cta;
-		getTime();
+	   	});
 		function busColor(mins){
 			if (parseInt(mins) <= 8)
 				return "#8B0000";
@@ -452,6 +471,20 @@
 			else
 				return "##483D8B";
 		}
+		
+		$("#busSubmitBtn").click(function(){
+			var busDisplayUL = document.getElementById("busResults");
+			var li = document.createElement("li");
+        $(li).addClass("mdc-list-item");
+    	$(li).css("background-color", "#E2E2E2");
+    	li.appendChild(document.createTextNode("Loading..."));
+    	busDisplayUL.appendChild(li);
+    		getTime();
+       	var transit = "http://ctabustracker.com/bustime/api/v2/getpredictions&key=7hV55iRDcTmvtMmgg2y9g5JWS=";
+		var end = route + "&stpid=" + clkdStp.stpid + "&format=json";
+		transit += end;
+		var url = proxy + transit;
+		getTime();
 		var clkdStp = findStop(stopName, dir);
 		var route = document.getElementById("busRoute").value;
 		var dir = document.getElementById("busDirection").value;
@@ -466,17 +499,17 @@
 				    response = JSON.parse(response);
 				    if (response["bustime-response"]["error"]){
 			
-						$(busDisplayUL).empty();
+							$(busDisplayUL).empty();
 				    	var li = document.createElement("li");
 			    		$(li).addClass("mdc-list-item");
 			    		$(li).css("background-color", "#E2E2E2");
-			    		li.appendChild(document.createTextNode("CTA API: No Service Scheduled"));
+			    		li.appendChild(document.createTextNode("CTA API: No Bus Arriving"));
 			    		busDisplayUL.appendChild(li);
 				    }
 				    else{
 						$(busDisplayUL).empty();
 				    	$.each(response["bustime-response"]["prd"], function(i, v){
-				    		var predictedArrival = v.prdtm;
+				    		var estimatedArrival = v.prdtm;
 				    		estimatedArrival = insertToString(estimatedArrival, "/", 4);
 				    		estimatedArrival = insertToString(estimatedArrival, "/", 7);
 				    		var li = document.createElement("li");
@@ -488,7 +521,7 @@
 				    		
 				    		if (parseInt(mins) <= 0){
 				    			$(li).css("background-color", "##4682B4");
-				    			li.appendChild(document.createTextNode("APPROACHING"));
+				    			li.appendChild(document.createTextNode("ARRIVING"));
 				    		}
 				    		else if (parseInt(mins) < 50){
 				    			$(li).css("background-color", timeColor(mins));
@@ -496,35 +529,39 @@
 				    		}
 				    		else{
 				    			$(li).css("background-color", "##800000");
-				    			li.appendChild(document.createTextNode("Error: try again"));
+				    			li.appendChild(document.createTextNode("Error: Search Again"));
 				    		}
 				    		
 				    		busDisplayUL.appendChild(li);
 					    });
 				    }
-			    })
+			    
+			    });
 			    .fail(function(err) {
 				   		throw err;
 			       });
 		});
 		
 		
-		
+		const distanceSelect = new mdc.select.MDCSelect(document.querySelector("#distanceDiv"));
+
 		var db = new Dexie('UIC Bus Tracker-Distance');
+		$("#distanceSelect").change(function(){
+		document.getElementById("saveChanges").disabled = false;
+		});
 		
 		db.version(1).stores({
  		favorites: 'id,value'
 	   	});
+	   
+	   
 	   	db.open().catch(function(err){
-	   	console.log("Error trying to open database");
+	   	console.log("Error info not coming in");
 	   	});
 	   	
-	   	$("#distanceSelect").change(function(){
-		document.getElementById("saveChanges").disabled = false;
-		});
-		const distanceSelect = new mdc.select.MDCSelect(document.querySelector("#distanceDiv"));
+	   
 		
-		db.favorites.add({id:1, value:"19"});
+		db.favorites.add({id:1, value:"16"});
 		$("#saveChanges").click(function(){
 			var distanceSelect = document.getElementById("distanceSelect");
 			var chooseDistance = distanceSelect.options[distanceSelect.selectedInfo].value;
@@ -540,12 +577,11 @@
 				});
 				
 		saveResultUL.appendChild(li);
-			zoomValue = parseInt(clickedValue);
+			zoomValue = parseInt(chooseDistance);
 			initMap();
 		});
+		// third screen
 		
-		var map;
-	   	var zoomValue = 16;
 			
         
 		var pinDrop = {lat: 41.872051, lng: -87.647735};
@@ -563,6 +599,8 @@
 			else
 			  alert("geolocation Does not work");
 	   	});
+	   	var map;
+	   	var zoomValue = 16;
 		    
 		function initMap() {
 	   		var pin = pinDrop;
@@ -610,12 +648,12 @@
     		}
 	   	}
 			
-			function busInfo(v){
+		function busInfo(v){
 	        var loc = v.lat + "," + v.lon;
 	    	var gMapsURL = "https://www.google.com/maps/?q=";
 	    	gMapsURL += loc;
 			var info = 
-				'<div id="info">'+
+				'<div id="content">'+
 					'<h1 id="firstHeading" class="firstHeading">' + v.stpnm + '</h1>'+
 					'<div id="bodyContent">'+
 						'<p>' + "<strong>Bus Number: </strong>" + v.rt + '</p>'+
@@ -626,8 +664,8 @@
 			return info;
 	    }
 	    function addPin(key){
-	    	if (key== "RED"){
-	    		$.each(busStopsArr[key], function(i, v){
+	    	if (key== "008E"){
+	    		$.each(stopArr[key], function(i, v){
 		   			var longitude = v.lon;
 		   			var latitude = v.lat;
 		   			var color = colors[key];
@@ -639,11 +677,11 @@
 						title: name,
 						icon: 
 						{
-					        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+					        path: google.maps.SymbolPath.CIRCLE,
 					        scale: 5.5,
 					        fillColor: color,
 					        fillOpacity: 1.0,
-					        strokeWeight: 0.4
+					        xWeight: 0.4
 					    }
 					});
 					
@@ -660,7 +698,7 @@
    		   	if ('serviceWorker' in navigator){
 	   		window.addEventListener('load', function(){
 	   			navigator.serviceWorker.register('./sw.js').then(function(registration){
-	   				console.log('ServiceWorker registration successful: ', registration.scope);
+	   				console.log('ServiceWorker registration successful with scope: ', registration.scope);
 	   			}, function(err){
 	   				console.log('ServiceWorker registration error: ', err);
 	   			});
