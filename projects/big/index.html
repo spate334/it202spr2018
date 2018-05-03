@@ -172,7 +172,11 @@
 	$(document).ready(function(){
 	   		console.log("Document Ready");
 	   	});
-	   	
+	   	var proxy = "https://polar-garden-75406.herokuapp.com/apiPassThru.php?apiEndpoint=";
+	   
+	   	let drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector('.mdc-drawer--temporary'));
+		document.querySelector('#shrine-nav-icon').addEventListener('click', () => drawer.open = true);
+		
 	   	var eigthSouth = [
 			{rt: "8", dir: "Southbound", stpid: "5804", stpnm: "Halsted & 14th Place", lat: 41.862389936575, lon: -87.646812200546},
 			{rt: "8", dir: "Southbound", stpid: "4638", stpnm: "Halsted & Harrison", lat: 41.873831019714, lon: -87.647214531898},
