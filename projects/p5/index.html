@@ -1,101 +1,131 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
+    
     <head>
-        <title>Projecct 5</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    
+    <title>Project 5</title>
+    
+    <style></style>
+    
     </head>
+  
     <body>
-        <script
-          src="https://code.jquery.com/jquery-3.3.1.min.js"
-          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-          crossorigin="anonymous"></script>
         
         <video id="player" controls autoplay></video>
         <button id="capture">Capture</button>
         <canvas id="canvas" width=320 height=240></canvas>
-        <canvas id="frameCanvas" width="320" height="240"></canvas>
-        <div id="imageData" ></div>
-
         
-        <script>
-          const player = document.getElementById('player');
-          const canvas = document.getElementById('canvas');
-          const context = canvas.getContext('2d');
-          const captureButton = document.getElementById('capture');
-          var doFaceCapture = false;
-          var visionApiEndpoint = "https://vision.googleapis.com/v1/images:annotate?key=";
-          var nextX = 0, nextY = 0;
-          var requestBody;
-          
-          const constraints = {
+        <button id="copy" style="display:none;">Copy</button>
+        <canvas id="copyCanvas" width=800 height=480></canvas>
+        
+    <script>
+    
+        var visionApiEndpoint =  "https://vision.googleapis.com/v1/images:annotate?key=";
+        
+        const player = document.getElementById('player');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const captureButton = document.getElementById('capture');
+        
+        
+        const copyButton = document.getElementById('copy');
+        const copyCanvas = document.getElementById('copyCanvas');
+        const destC = copyCanvas.getContext('2d');
+        var xNext = 0;
+        var yNext = 0;
+        var noFace = true;
+        
+        const constraints = {
             video: true,
-          };
-         captureButton.addEventListener('click', () => {
-           
-            doFaceCapture = true;
+        };
+    
+        captureButton.addEventListener('click', () => {
+            // Draw the video frame to the canvas.
             context.drawImage(player, 0, 0, canvas.width, canvas.height);
+            //show copy button when capture button is pressed
+            $("#copy").show(); 
+        });
+        
+        // Attach the video stream to the video element and autoplay.
+        navigator.mediaDevices.getUserMedia(constraints)
+        .then((stream) => {
+            player.srcObject = stream;
+        });
+        
+        copyButton.addEventListener('click', () => {
+            
             getImageData('FACE_DETECTION');
-          });
-        
-        
-          navigator.mediaDevices.getUserMedia(constraints)
-            .then((stream) => {
-              player.srcObject = stream;
-            });
-         function getImageData(type) {  
-         requestBody = {
-                    "requests":[
-                        {
-                          "image":{
-                            "content": canvas.toDataURL().split(",")[1]
-                          },
-                          "features":[
-                            {
-                              "type": type,
-                              "maxResults": 1
-                            }
-                          ]
-                        }
-                      ]
-                };
-        $.ajax({
-            method: "POST",
-            contentType: "application/json",
-            url: visionApiEndpoint+"?key=AIzaSyBijMwI7Leeu_i7MBF0hmpycUOZ2CG4jJU",
-            data: JSON.stringify(requestBody)
-        })
-        .done(function(response){
-                    console.log(response);
-                    $("#image").html("<pre>" + JSON.stringify(response) + "</pre>")
-                   
-                    var faceVertices = response.responses[0].faceAnnotations[0].boundingPoly.vertices;
-                    console.log(faceVertices);
-                          
-                    
-                    var topLeft = faceVertices[0];
-                    var bottomRight = faceVertices[2];
-                    console.log(bottomRight, bottomRight.x, topLeft, topLeft.x);
-                    
-                    
-                    var faceWidth = bottomRight.x - topLeft.x;
-                    var faceHeight = bottomRight.y - topLeft.y;
-                    var sourceX = topLeft.x;
-                    var sourceY = topLeft.y;
-                    
-                    context.drawImage(canvas, sourceX, sourceY, faceWidth, faceHeight, nextX, nextY, faceWidth, faceHeight);
-                    
-                    nextX += faceWidth;
-                  
-                    if (doFaceCapture) {
-                      getImageData('FACE_DETECTION');
-                    }
-                    else{
-                      $("#imageData").prepend("<p>No Face Detected</p>")
-                    }
-                    
-                });
+            
+        });
+    
+        function getImageData() {
+            requestBody = {
+                
+            "requests":[
+            {
+            "image":{
+            "content": canvas.toDataURL().split(",")[1]
+            },
+            "features":[
+            {
+              "type":"FACE_DETECTION",
+              "maxResults":10
             }
-        </script>
-        <script> 
-        </script>
+            ]
+            }
+            ]
+        
+            } 
+            
+            $.ajax({
+                
+                method: "POST",
+                contentType: "application/json",
+                url: visionApiEndpoint + "AIzaSyBijMwI7Leeu_i7MBF0hmpycUOZ2CG4jJU",
+                data: JSON.stringify(requestBody)
+            })
+            .done(function(response) {
+                console.log(response);
+                $("#imageData").html("<pre>" + JSON.stringify(response) + "</pre>")
+                
+                var faceVertices = response.responses[0].faceAnnotations[0].boundingPoly.vertices;
+                console.log(faceVertices);
+                
+                
+                // find corners
+                var topLeft = faceVertices[0];
+                var bottomRight = faceVertices[2];
+                console.log(bottomRight, bottomRight.x, topLeft, topLeft.x);
+                
+                // determine width and height for cropping
+                var faceWidth = bottomRight.x - topLeft.x;
+                var faceHeight = bottomRight.y - topLeft.y;
+                var sourceX = topLeft.x;
+                var sourceY = topLeft.y;
+                xNext = xNext + faceWidth;
+                destC.drawImage(canvas, sourceX, sourceY, faceWidth, faceHeight, xNext, yNext, faceWidth, faceHeight);
+                
+                
+                if(xNext >= 700) {
+                    
+                    xNext = 0;
+                }
+                
+            });
+        }
+    </script>
+        
+        
     </body>
 </html>

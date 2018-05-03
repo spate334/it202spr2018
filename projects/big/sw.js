@@ -2,7 +2,7 @@ var dataCacheName = 'busTracker';
 var cacheName = 'UICBusTracker';
 var urlsToCache = [
   './',
-  './imgs/chicago.jpg',
+  './imgs/bus.png',
   './imgs/favicon.ico',
   'https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css',
   'https://fonts.googleapis.com/icon?family=Material+Icons'
