@@ -1,46 +1,23 @@
 var dataCacheName = 'busTracker';
 var cacheName = 'UICBusTracker';
-var filesToCache = [
-  '.',
-  'index.html',
+var urlsToCache = [
+  './',
+  './imgs/uic.png',
   './imgs/favicon.ico',
-  'uic.jpg'
-  
+  'https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css',
+  'https://fonts.googleapis.com/icon?family=Material+Icons'
 ];
 
-var dataUrls = [
-
-'https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css',
-'https://fonts.googleapis.com/icon?family=Material+Icons'
-];
-
-
-self.addEventListener('install', function(e) {
-  e.waitUntil(
-    caches.open(cacheName).then(function(cache) {
-      
-      return cache.addAll(filesToCache);
-    })
-  );
+self.addEventListener('install', function(event){
+	event.waitUntil(caches.open(cacheName).then(function(cache){
+		console.log('Opened cache');
+		return cache.addAll(urlsToCache);
+	})
+	);
 });
 
-elf.addEventListener('activate', function(e) {
-  console.log('[ServiceWorker] Activate');
-  e.waitUntil(
-    caches.keys().then(function(keyList) {
-      return Promise.all(keyList.map(function(key) {
-        if (key !== cacheName) {
-          console.log('[ServiceWorker] Removing old cache', key);
-          return caches.delete(key);
-        }
-      }));
-    })
-  );
-  return self.clients.claim();
-});
-
-self.addEventListener('fetch', function(e) {
- 	if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
+self.addEventListener('fetch', function(event) {
+	if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
 		return;
 	}
 	event.respondWith(
