@@ -1,4 +1,24 @@
+var sevenStopsWest = [];
 	    var sixtyStopsWest = [];
+
+	    function sevenWest(response)
+	    {
+	    	$.each(response["stops"], function(i, v){
+
+	    		var id = parseInt(v.stpid);
+
+	    		if (id === 6364 || id === 6365 || id === 206 || id === 207 || id === 208)
+	    		{
+	    			sevenStopsWest.push(v);
+	    			sixtyStopsWest.push(v);
+	    		}
+	    		else if (id === 210 || id === 18340 || id === 18335)
+	    		{
+	    			sevenStopsWest.push(v);
+	    		}
+	    	});
+	    }
+
 	    function sixtyWest(response)
 	    {
 	    	$.each(response["stops"], function(i, v){
@@ -11,9 +31,28 @@
 	    		}
 	    	});
 	    }
+
+	    var sevenStopsEast = [];
 	    var sixtyStopsEast = [];
 
-	  
+	    function sevenEast(response)
+	    {
+	    	$.each(response["stops"], function(i, v){
+	    		
+	    		var id = parseInt(v.stpid);
+
+	    		if (id === 14210 || id === 17995 || id === 6347 || id === 201 || id === 200)
+	    		{
+	    			sevenStopsEast.push(v);
+	    			sixtyStopsEast.push(v);
+	    		}
+	    		else if (id === 198 || id === 18339 || id === 18336)
+	    		{
+	    			sevenStopsEast.push(v);
+	    		}
+	    	});
+	    }
+
 	    function sixtyEast(response)
 	    {
 	    	$.each(response["stops"], function(i, v){
@@ -114,21 +153,43 @@
 	    	});
 	    }
 
-		// // AJAX stuff
+		
 		proxy = "https://polar-garden-75406.herokuapp.com/apiPassThru.php?apiEndpoint=";
 
-		// array that has each URL for each bus stop and for the route and direction given
+		
 		busStopsURLs = [
-			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS=8&dir=Southbound&format=json",
-			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS=8&dir=Northbound&format=json",
-			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS=12&dir=Eastbound&format=json",
-			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS=12&dir=Westbound&format=json",
-			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS=60&dir=Eastbound&format=json",
-			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS=60&dir=Westbound&format=json",
-			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS=157&dir=Eastbound&format=json",
-			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS=157&dir=Westbound&format=json"
+			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS&rt=7&dir=Eastbound&format=json",
+			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS&rt=7&dir=Westbound&format=json",
+			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS&rt=8&dir=Southbound&format=json",
+			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS&rt=8&dir=Northbound&format=json",
+			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS&rt=12&dir=Eastbound&format=json",
+			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS&rt=12&dir=Westbound&format=json",
+			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS&rt=60&dir=Eastbound&format=json",
+			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS&rt=60&dir=Westbound&format=json",
+			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS&rt=157&dir=Eastbound&format=json",
+			"http://ctabustracker.com/bustime/api/v2/getstops&key=7hV55iRDcTmvtMmgg2y9g5JWS&rt=157&dir=Westbound&format=json"
 		];
 		
+		$.ajax({
+	        url: proxy += busStopsURLs[0],
+	        method: 'GET',
+	     }).done(function(response){
+		    	response = JSON.parse(response);
+		    	sevenEast(response["bustime-response"]);
+		    }).fail(function(err) 
+			   {
+			   		throw err;
+		       });
+	    $.ajax({
+	        url: proxy += busStopsURLs[1],
+	        method: 'GET',
+	     }).done(function(response){
+		    	response = JSON.parse(response);
+		    	sevenWest(response["bustime-response"]);
+		    }).fail(function(err) 
+			   {
+			   		throw err;
+		       });
 	    $.ajax({
 	        url: proxy += busStopsURLs[2],
 	        method: 'GET',
@@ -233,8 +294,12 @@ function findStop(route, direction, stopName)
 				});
 			}
 			else if (direction === "Eastbound"){
-				if (route === "60"){
+				if (route === "7" || route === "60"){
 					$.each(busStopsArr["SMEE"], function(i, v){
+						if (v.stpnm === stopName)
+							stop = v;
+					});
+					$.each(busStopsArr["007E"], function(i, v){
 						if (v.stpnm === stopName)
 							stop = v;
 					});
@@ -257,8 +322,12 @@ function findStop(route, direction, stopName)
 				}
 			}
 			else if (direction === "Westbound"){
-				if (route === "60"){
+				if (route === "7" || route === "60"){
 					$.each(busStopsArr["SMEW"], function(i, v){
+						if (v.stpnm === stopName)
+							stop = v;
+					});
+					$.each(busStopsArr["007W"], function(i, v){
 						if (v.stpnm === stopName)
 							stop = v;
 					});
