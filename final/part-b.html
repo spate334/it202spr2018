@@ -55,11 +55,23 @@
     </div>
 
 <script> 
+    var map;
+    var markers = [];
+    function initMap() {
+                map = new google.maps.Map($("#map")[0], {
+                    zoom: 8,
+                    center: {lat: 41.8781, lng: -87.7298}
+                });
+            }
     function getData(){
          $.ajax({
                     url: "https://data.cityofchicago.org/resource/t57k-za2y.json?$SELECT=distinct%20clinic_type",
                     type: "GET",
-    }
+    
+    }).done(function(data) {
+                    
+                    console.log(data);
+                    $("#results").text("");
 
 
 
