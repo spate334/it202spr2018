@@ -30,5 +30,40 @@
         #searchButton{
             margin-top: 20px;
         }
+         #map {
+            height: 800px;
+        }
     </style>
-    document.getElementById("myBtn").addEventListener("click", function(){
+ <body>
+     <div id="map" class="hidden"></div>
+    <div class="container">
+        <div class="center">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="" id="sti_check">STI Specialty Clinic</label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="" id="mental_check">Mental Health Clinic</label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="" id="wic_check">WIC Clinic</label>
+            </div>
+        </div>
+        <button onclick = "getData()">Search</button>
+    </div>
+
+<script> 
+    function getData(){
+         $.ajax({
+                    url: "https://data.cityofchicago.org/resource/t57k-za2y.json?$SELECT=distinct%20clinic_type",
+                    type: "GET",
+    }
+
+
+
+
+
+</script>
+   
