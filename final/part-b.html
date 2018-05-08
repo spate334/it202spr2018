@@ -63,6 +63,16 @@
                     center: {lat: 41.8781, lng: -87.7298}
                 });
             }
+     function removeMarkers() {
+            clearMarkers();
+            markers = [];
+          }
+     function setMapOnAll(map) {
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(map);
+        }
+      }
+      
     function getData(){
          $.ajax({
                     url: "https://data.cityofchicago.org/resource/t57k-za2y.json?$SELECT=distinct%20clinic_type",
@@ -74,8 +84,12 @@
                     $("#results").text("");
 
 
-
+}
+};
 
 
 </script>
-   
+  <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDX_xg7O6Xp4drooouVXsYEd50o13_TdCY&callback=initMap">
+    </script>
+</html> 
